@@ -1,13 +1,7 @@
 import React from "react";
 import { Avatar, Badge, Layout, Menu, Popover } from "antd";
-import {
-  Bell,
-  Lock,
-  LogOut,
-  User,
-  User2Icon,
-} from "lucide-react";
-import { Link, Outlet, useNavigate } from "react-router-dom";
+import { Bell, Lock, LogOut, User, User2Icon } from "lucide-react";
+import { Link, Outlet, useNavigate, useLocation } from "react-router-dom";
 import logo from "../../assets/Images/LogoAndTitle.svg";
 import logoChoozy from "../../assets/Images/dashboard/pie-chart.svg";
 import productListing from "../../assets/Images/dashboard/tag.png";
@@ -82,8 +76,9 @@ interface NotificationBadgeProps {
   handleNotifications: (event: React.MouseEvent<HTMLDivElement>) => void;
 }
 
-const Dashboard: React.FC<NotificationBadgeProps> = ({ }) => {
+const Dashboard: React.FC<NotificationBadgeProps> = ({}) => {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleLogout = () => {
     navigate("/auth/login");
@@ -91,8 +86,63 @@ const Dashboard: React.FC<NotificationBadgeProps> = ({ }) => {
 
   const handleNotifications = () => {
     console.log("clicked");
-    navigate('/notifications')
-  }
+    navigate("/notifications");
+  };
+
+  // Map the pathnames to header titles
+  const getTitle = () => {
+    switch (location.pathname) {
+      case "/":
+        return (
+          <div>
+            <h1 className="text-[#333333] font-bold text-[24px]">
+              <span className="text-[#B0B0B0]">Hello,</span> Globetrotter 👋
+            </h1>
+          </div>
+        );
+      case "/productListing":
+        return (
+          <div>
+            <h1 className="text-[#333333] font-bold text-[24px]">
+              Manage Listings
+            </h1>
+          </div>
+        );
+      case "/category_management":
+        return (
+          <div>
+            <h1 className="text-[#333333] font-bold text-[24px]">
+              Manage Category
+            </h1>
+          </div>
+        );
+      case "/manage-users":
+        return (
+          <div>
+            <h1 className="text-[#333333] font-bold text-[24px]">
+              Manage Users 
+            </h1>
+          </div>
+        );
+      
+    
+    
+      case "/love":
+        return "Love";
+      case "/transactions":
+        return "Transactions";
+      case "/settings":
+        return "Settings";
+      default:
+        return (
+          <div>
+            <h1 className="text-[#333333] font-bold text-[24px]">
+              <span className="text-[#B0B0B0]">Hello,</span> Globetrotter 👋
+            </h1>
+          </div>
+        );
+    }
+  };
 
   return (
     <Layout>
@@ -133,7 +183,11 @@ const Dashboard: React.FC<NotificationBadgeProps> = ({ }) => {
 
           <div className="flex py-36 gap-8 px-4 w-full">
             <div className="flex gap-2 w-3/4 items-center">
-              <Popover className="cursor-pointer" placement="top" content={content}>
+              <Popover
+                className="cursor-pointer"
+                placement="top"
+                content={content}
+              >
                 <div>
                   <Avatar
                     style={{
@@ -168,16 +222,13 @@ const Dashboard: React.FC<NotificationBadgeProps> = ({ }) => {
           style={{
             background: "#F6F6F6",
             height: "80px",
+            paddingTop: "20px",
             display: "flex",
             justifyContent: "flex-end",
           }}
         >
-          <div className="w-full flex justify-between items-center gap-5">
-            <div>
-              <h1 className="text-[#333333] font-bold text-[24px]">
-                <span className="text-[#B0B0B0]">Hello,</span> Globetrotter 👋
-              </h1>
-            </div>
+          <div className="w-full flex justify-between items-center">
+            <div>{getTitle()}</div>
             <div onClick={handleNotifications} className="cursor-pointer">
               <Badge count={5}>
                 <Bell size={30} color="#5D5D5D" />

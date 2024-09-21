@@ -88,6 +88,80 @@ border-color: transparent !important;
 }
 
 
+ /* css of ant design table style   */
+ .ant-table-wrapper table {
+  background-color: #e9f4f3;
+  border-radius: 0;
+}
+:where(.css-dev-only-do-not-override-d2lrxs).ant-table-wrapper
+  .ant-table-thead
+  > tr
+  > th,
+:where(.css-dev-only-do-not-override-d2lrxs).ant-table-wrapper
+  .ant-table-thead
+  > tr
+  > td {
+  /* background: #1f8d84; */
+  color: white;
+  /* text-align: center; */
+  
+}
+.ant-table-wrapper
+  .ant-table-container
+  table
+  > thead
+  > tr:first-child
+  > *:first-child {
+  border-start-start-radius: 0px;
+  /* padding-left: 24px; */
+}
+.ant-table-wrapper .ant-table-tbody > tr:first-child > *:first-child {
+  /* padding-left: 24px; */
+}
+
+.ant-table-wrapper
+  .ant-table-container
+  table
+  > thead
+  > tr:first-child
+  > *:last-child {
+  border-start-end-radius: 0;
+  text-align: start;
+}
+
+
+/* data roe */
+.ant-table-wrapper .ant-table-tbody > tr > td
+{
+  border-bottom: none !important;
+}
+.ant-table-wrapper .ant-table-tbody > tr > td {
+ 
+  /* padding-left: 50px; */
+}
+.ant-table-wrapper
+  .ant-table-thead
+  > tr
+  > th:not(:last-child):not(.ant-table-selection-column):not(
+    .ant-table-row-expand-icon-cell
+  ):not([colspan])::before,
+:where(.css-dev-only-do-not-override-1pg9a38).ant-table-wrapper
+  .ant-table-thead
+  > tr
+  > td:not(:last-child):not(.ant-table-selection-column):not(
+    .ant-table-row-expand-icon-cell
+  ):not([colspan])::before {
+  width: 0;
+  height: 0;
+  content: "";
+}
+
+.ant-table-wrapper .ant-table-container table > tbody > tr > *:last-child {
+  text-align: start;
+}
+.ant-table-wrapper .ant-table-container table > tbody > tr {
+  color: #4e4e4e;
+}
 
 
 :where(.css-dev-only-do-not-override-11xg00t).ant-menu-light
@@ -97,7 +171,7 @@ border-color: transparent !important;
 }
 
 .ant-pagination-item-active {
-  background: #dd1122 !important;
+  background: gray !important;
   border: 0 !important;
 }
 
@@ -106,13 +180,13 @@ border-color: transparent !important;
 }
 
 .ant-table-wrapper table {
-  background-color: #2e2d2d !important;
+  background-color: transparent !important;
   color: #fff;
 }
 .ant-table-wrapper .ant-table-thead > tr > th,
 .ant-table-wrapper .ant-table-thead > tr > td {
-  background: #dd1122;
-  color: white;
+  /* background: #dd1122; */
+  color: black;
   border: 0 !important;
 }
 
@@ -121,7 +195,7 @@ border-color: transparent !important;
 }
 
 .ant-modal .ant-modal-content {
-  background-color: #2e2d2d !important;
+ 
   color: #fff;
 }
 

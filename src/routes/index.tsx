@@ -9,6 +9,12 @@ import Love from "../pages/Love";
 import Transactions from "../pages/Transactions";
 import SettingsPage from "../pages/Settings";
 import Notifications from "../pages/Notifications";
+import Auth from './../layout/auth/Auth';
+import Login from "../pages/Login";
+import ForgetPassword from "../pages/ForgetPassword";
+import VerifyEmail from "../pages/VerifyEmail";
+import SetNewPassword from "../pages/SetNewPassword";
+import Seller_Profile from "../pages/Seller_Profile";
 
 
 
@@ -35,12 +41,16 @@ const router = createBrowserRouter([
                 element: <ProductListing />,
             },
             {
-                path: "/catgegory_anagement",
+                path: "/category_management",
                 element: <Category_Management />,
             },
             {
                 path: "/manage-users",
                 element: <Manage_Users />,
+            },
+            {
+                path: "/manage-users/seller-profile/:id",
+                element: <Seller_Profile />,
             },
             {
                 path: "/love",
@@ -55,7 +65,34 @@ const router = createBrowserRouter([
                 element: <SettingsPage />,
             },
         ]
-    }
+    },
+    {
+        path: "/auth",
+        element: <Auth />,
+        children: [
+          {
+            path: "/auth",
+            element: <Login />,
+          },
+          {
+            path: "/auth/login",
+            element: <Login />,
+          },
+          {
+            path: "/auth/forget-password",
+            element: <ForgetPassword />,
+          },
+          {
+            path: "/auth/verify",
+            element: <VerifyEmail />,
+          },
+          {
+            path: "/auth/set-new-password",
+            element: <SetNewPassword />,
+          },
+                 
+        ],
+      },
 ])
 
 export default router;

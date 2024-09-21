@@ -75,7 +75,7 @@ const Notifications = (props: Props) => {
           </h1>
         </div>
        <div className="flex items-center gap-4">
-       {/* <h1>2 minutes ago</h1> */}
+       <h1>2 minutes ago</h1>
        <Badge color="red" count={0}>{/* <Avatar shape="none" size="" /> */}</Badge>
        </div>
       </div>
