@@ -20,5 +20,6 @@ const SelectBox: React.FC<SelectBoxProps> = ({options, placeholder, onChange, st
     options={options}
   />
 );
+  
 
 export default SelectBox;

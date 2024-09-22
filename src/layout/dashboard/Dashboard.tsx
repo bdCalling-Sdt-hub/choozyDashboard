@@ -11,6 +11,7 @@ import { FaRegUserCircle, FaRegHeart } from "react-icons/fa";
 import { CiCreditCard1 } from "react-icons/ci";
 import settings from "../../assets/Images/dashboard/settings.png";
 
+
 const { Header, Sider, Content } = Layout;
 
 interface MenuItem {
@@ -128,9 +129,21 @@ const Dashboard: React.FC<NotificationBadgeProps> = ({}) => {
     
     
       case "/love":
-        return "Love";
+        return (
+          <div>
+            <h1 className="text-[#333333] font-bold text-[24px]">
+             Love
+            </h1>
+          </div>
+        );
       case "/transactions":
-        return "Transactions";
+        return (
+          <div>
+            <h1 className="text-[#333333] font-bold text-[24px]">
+             Transactions
+            </h1>
+          </div>
+        );
       case "/settings":
         return "Settings";
       default:
@@ -181,7 +194,7 @@ const Dashboard: React.FC<NotificationBadgeProps> = ({}) => {
             );
           })}
 
-          <div className="flex py-36 gap-8 px-4 w-full">
+          <div className="flex py-36 gap-8 mt-16 px-4 w-full">
             <div className="flex gap-2 w-3/4 items-center">
               <Popover
                 className="cursor-pointer"
