@@ -15,6 +15,10 @@ import ForgetPassword from "../pages/ForgetPassword";
 import VerifyEmail from "../pages/VerifyEmail";
 import SetNewPassword from "../pages/SetNewPassword";
 import Seller_Profile from "../pages/Seller_Profile";
+import Settings_personalInformation from "../pages/Settings_personalInformation";
+import SettingsFaq from "../pages/SettingsFaq";
+import SettingsTermsAndConditions from "../pages/SettingsTermsAndConditions";
+import EditTermsAndCondition from "../pages/EditTermsAndConditions";
 
 
 
@@ -63,6 +67,22 @@ const router = createBrowserRouter([
             {
                 path: "/settings",
                 element: <SettingsPage />,
+            },
+            {
+                path: "/settings/personalInformation",
+                element: <Settings_personalInformation />,
+            },
+            {
+                path: "/settings/faq",
+                element: <SettingsFaq />,
+            },
+            {
+                path: "/settings/termsAndCondition",
+                element: <SettingsTermsAndConditions />
+            },
+            {
+                path: "settings/termsAndCondition/edittermsAndConditions",
+                element: <EditTermsAndCondition />
             },
         ]
     },

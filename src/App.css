@@ -206,9 +206,10 @@ border-color: transparent !important;
 /* jodit editor */
 .jodit,
 .jodit-container * {
-  background: #2e2d2d !important;
-  color: wheat !important;
+  /* background: #2e2d2d !important; */
+  /* color: wheat !important; */
   border: none !important;
+
 }
 
 .auth-wrapper {
@@ -227,4 +228,9 @@ border-color: transparent !important;
 }
 ::placeholder {
   color: #a19e9e !important;
+}
+
+
+.jodit-react-container .jodit-wysiwyg{
+  min-height: 300px !important;
 }
