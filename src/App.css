@@ -212,6 +212,12 @@ border-color: transparent !important;
 
 }
 
+
+.jodit-react-container .jodit-wysiwyg{
+  min-height: 300px !important;
+}
+
+
 .auth-wrapper {
   width: 100%;
   height: 100vh;
@@ -230,7 +236,3 @@ border-color: transparent !important;
   color: #a19e9e !important;
 }
 
-
-.jodit-react-container .jodit-wysiwyg{
-  min-height: 300px !important;
-}

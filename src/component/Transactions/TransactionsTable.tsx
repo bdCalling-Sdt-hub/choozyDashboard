@@ -2,7 +2,7 @@ import { Input, Table } from "antd";
 import React, { useState } from "react";
 import image from "../../assets/Images/Notifications/Avatar.png";
 import { Trash, Search, Pencil } from "lucide-react";
-import ModalComponent from "../../component/share/ModalComponent";
+import ModalComponent from "../share/ModalComponent";
 import SelectBox from "../share/SelectBox";
 
 interface UserAction {
@@ -26,22 +26,24 @@ interface UserData {
 
 interface ProductListingProps {}
 
-const TransactionChart: React.FC<ProductListingProps> = () => {
+const TransactionTable: React.FC<ProductListingProps> = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [openModel, setOpenModel] = useState<boolean>(false);
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
   const [userData, setUserData] = useState<UserAction>({} as UserAction);
   const [type, setType] = useState<string>("");
-  const [selectedValue, setSelectedValue] = useState<string | undefined>()
+  const [selectedValue, setSelectedValue] = useState<string | undefined>();
 
   const pageSize = 10;
 
   const data: UserData[] = [...Array(9).keys()].map((item, index) => ({
+    name: "Sam",
     sId: index + 1,
     image: <img src={image} className="w-9 h-9 rounded" alt="avatar" />,
-    name: "KTM 390Duke",
+    date: "9-24-204",
+    purchasedProduct: "iMac air 2017",
     category: "Vehicle",
-    price: "$6729.00",
+    amount: "$6729.00",
     quantity: "Quantity",
     status: "Approved",
     action: {
@@ -49,67 +51,44 @@ const TransactionChart: React.FC<ProductListingProps> = () => {
       image: <img src={image} className="w-9 h-9 rounded" alt="" />,
       name: "Fahim",
       category: "Category",
-      price: "$6729.00",
+      amount: "$6729.00",
       quantity: "quantity",
       status: "Approved",
-      dateOfBirth: "24-05-2024",
+      date: "9-24-204",
+      purchasedProduct: "iMac air 2017",
       contact: "0521545861520",
     },
   }));
 
   const columns = [
     {
-      title: "Listing",
-      dataIndex: "image",
-      key: "image",
-      render: (_: any, record: UserData) => (
-        <div className="flex items-center">
-          {record.image}
-          <span className="ml-3">{record.name}</span>
-        </div>
-      ),
+      title: "Date",
+      dataIndex: "date",
+      key: "date",
     },
     {
-      title: "Category",
-      dataIndex: "category",
-      key: "category",
+      title: "Name",
+      dataIndex: "name",
+      key: "name",
     },
     {
-      title: "Price",
-      dataIndex: "price",
-      key: "price",
+      title: "Purchased Product ",
+      dataIndex: "purchasedProduct",
+      key: "purchasedProduct",
     },
+
     {
-      title: "Quantity",
-      dataIndex: "quantity",
-      key: "quantity",
+      title: "Amount",
+      dataIndex: "amount",
+      key: "amount",
     },
     {
       title: "Status",
       dataIndex: "status",
       key: "status",
     },
-    {
-      title: <div className="text-right">Action</div>,
-      dataIndex: "action",
-      key: "action",
-      render: (_: any, record: UserData) => (
-        <div className="flex items-center justify-end gap-3">
-          <button
-            onClick={() => handleUser(record.action)}
-            className="hover:bg-primary p-1 rounded bg-blue"
-          >
-            <Pencil />
-          </button>
-          <button
-            onClick={() => handleDelete(record.action)}
-            className="bg-secondary px-3 py-1 rounded hover:bg-primary"
-          >
-            <Trash />
-          </button>
-        </div>
-      ),
-    },
+        
+    
   ];
 
   const handlePage = (page: number) => {
@@ -139,28 +118,28 @@ const TransactionChart: React.FC<ProductListingProps> = () => {
     // Add delete logic here
   };
   const selectOptions = [
-    {value: '1', label: 'week'}, 
-    {value: '2', label: 'Month'}, 
-    {value: '3', label: 'Year'}, 
-  ]
+    { value: "1", label: "week" },
+    { value: "2", label: "Month" },
+    { value: "3", label: "Year" },
+  ];
   const handleSelectChange = (value: string) => {
     setSelectedValue(value);
     console.log("Selected", value);
-  }
+  };
 
   return (
     <div className="mt-2">
-        <div className="flex justify-between w-full">
+      <div className="flex justify-between w-full">
         <div>
           <h1 className="text-xl font-bold text-[#5D5D5D]">Overview</h1>
           <p className="text-[#5D5D5D]">Activities summary at a glance</p>
         </div>
         <div className="pr-8">
           <SelectBox
-          options={selectOptions}
-          placeholder="Week"
-          onChange={handleSelectChange}
-          style={{width: 100}}
+            options={selectOptions}
+            placeholder="Week"
+            onChange={handleSelectChange}
+            style={{ width: 100 }}
           />
         </div>
       </div>
@@ -200,4 +179,4 @@ const TransactionChart: React.FC<ProductListingProps> = () => {
   );
 };
 
-export default TransactionChart;
+export default TransactionTable;
