@@ -86,11 +86,11 @@ const Status: React.FC = () => {
           />
         </div>
       </div>
-      <div className="grid grid-cols-3 gap-12 w-[79vw] mt-[12px]">
+      <div className="grid grid-cols-3 w-[79vw] mt-[12px]">
       {cardData.map((card, index) => (
         <div
           key={card.id}
-          className={`w-[480.5px] h-[250px] px-[20px] py-[32px] flex justify-between items-center rounded-2xl cursor-pointer ${
+          className={`w-[450px] h-[210px] px-[20px] py-[32px] flex justify-between items-center rounded-2xl cursor-pointer ${
             selectedCard === index ? 'bg-[#02B5AA] text-[#E8EBF0]' : 'border border-[#E7E7E7]'
           }`}
           onClick={() => handleCardClick(index)} 
