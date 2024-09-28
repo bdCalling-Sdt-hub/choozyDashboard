@@ -4,6 +4,7 @@ import { HiMiniUsers } from "react-icons/hi2";
 import { FaArrowTrendUp } from "react-icons/fa6";
 import { SiPaypal } from "react-icons/si";
 import { FcComboChart } from "react-icons/fc";
+import './Style_dashboard.css'
 
 // import { useGetAllStatusApiQuery } from "../redux/Features/getAllStatusApi";
 
@@ -86,11 +87,11 @@ const Status: React.FC = () => {
           />
         </div>
       </div>
-      <div className="grid grid-cols-3 w-[79vw] mt-[12px]">
+      <div className="grid grid-cols-3 w-[calc(100% -300px)] mt-[12px]">
       {cardData.map((card, index) => (
         <div
           key={card.id}
-          className={`w-[450px] h-[210px] px-[20px] py-[32px] flex justify-between items-center rounded-2xl cursor-pointer ${
+          className={`2xl:w-[450px] xl:w-[320px] lg:w-[190px] w-[450px] h-[210px] px-[20px] py-[32px] flex justify-between items-center rounded-2xl cursor-pointer ${
             selectedCard === index ? 'bg-[#02B5AA] text-[#E8EBF0]' : 'border border-[#E7E7E7]'
           }`}
           onClick={() => handleCardClick(index)} 

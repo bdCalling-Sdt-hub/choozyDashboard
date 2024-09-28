@@ -1,4 +1,4 @@
-import { Modal, Button } from "antd";
+import { Modal, Button, Select } from "antd";
 import React from "react";
 
 interface ModalComponentProps {
@@ -11,6 +11,9 @@ interface ModalComponentProps {
   onCancel?: () => void; // Optional cancel handler
   onConfirm?: () => void; // Optional confirm handler
   children?: React.ReactNode; // Allow additional content to be rendered
+  role: string;
+  setRole: (role: string) => void;
+  value: any;
 }
 
 const ModalComponent: React.FC<ModalComponentProps> = ({
@@ -23,6 +26,8 @@ const ModalComponent: React.FC<ModalComponentProps> = ({
   onCancel,
   onConfirm,
   children, // Optional children for custom content
+  role,
+  setRole,
 }) => {
   const hideModal = () => {
     setOpenModel(false);
@@ -44,13 +49,31 @@ const ModalComponent: React.FC<ModalComponentProps> = ({
         padding: "20px",
         textAlign: "center",
       }} // Custom body styles
-      style={{ top: "20px" }} // Optional: Adjust modal position
+      style={{
+        top: "35%",
+        left: "35%",
+        // transform: "translate(-50%, -50%)", // Center horizontally and vertically
+        position: "absolute", // Use absolute positioning to center it
+      }} // Optional: Adjust modal position
       closable={false} // Disable the close button (optional)
     >
       {/* Title and subtitle section */}
       <div className="text-center mb-4">
         <h1 className="text-xl font-bold text-black">{title}</h1>
         <h2 className="text-lg text-gray-600">{subtitle}</h2>
+      </div>
+
+      {/* Role selection */}
+      <div className="mb-4 py-6">
+        <Select
+          value={role}
+          onChange={(value) => setRole(value)}
+          style={{ width: 200 }}
+        >
+          <Option value="Admin">Admin</Option>
+          <Option value="Member">Member</Option>
+          <Option value="Block">Block</Option>
+        </Select>
       </div>
 
       {/* Optional custom content */}

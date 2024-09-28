@@ -85,11 +85,11 @@ const Love: React.FC<Props> = () => {
         </div>
       </div>
       {/* Created items */}
-      <div className="grid grid-cols-8 gap-4 py-8">
+      <div className="grid xl:grid-cols-6 lg:grid-cols-4 md:grid-cols-2 grid-cols-8 gap-4 py-8">
         {items.map((item) => (
           <div
             key={item.sId}
-            className="flex justify-center border items-center rounded-2xl border-gray-200 w-40 h-40 text-center"
+            className="flex justify-center border items-center rounded-2xl border-gray-200 w-0 lg:w-40 md:w-48 h-40 text-center"
           >
             <div>
               <FaRegHeart className="mx-auto" size={25} color={"red"} />

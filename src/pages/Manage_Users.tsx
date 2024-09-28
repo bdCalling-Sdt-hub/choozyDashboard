@@ -13,6 +13,8 @@ interface UserAction {
   status: string;
   dateOfBirth: string;
   contact: string;
+  role: string;
+  value: any;
 }
 
 interface UserData {
@@ -22,6 +24,8 @@ interface UserData {
   email: string;
   status: string;
   action: UserAction;
+  role: string;
+  value: any;
 }
 
 interface ManageUsersProps {}
@@ -32,6 +36,7 @@ const Manage_Users = (props: Props) => {
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
   const [userData, setUserData] = useState<UserAction>({} as UserAction);
   const [type, setType] = useState<string>("");
+  const [role, setRole] = useState<string>("Admin"); 
 
   const pageSize = 10;
 
@@ -103,12 +108,12 @@ const Manage_Users = (props: Props) => {
           >
             <Pencil />
           </button>
-          <button
+          {/* <button
             onClick={() => handleDelete(record.action)}
             className="bg-secondary px-3 py-1 rounded hover:bg-primary"
           >
             <Trash />
-          </button>
+          </button> */}
         </div>
       ),
     },
@@ -170,9 +175,11 @@ const Manage_Users = (props: Props) => {
           title="User role"
           subtitle=""
           cancelLabel="Cancel"
+          role={role}
+          setRole={setRole}
           confirmLabel="Save Changes"
           onConfirm={confirmApprove} // Your approve logic
-        />
+          value={userData}       />
 
         <ModalComponent
           openModel={openDeleteModal}
@@ -181,8 +188,8 @@ const Manage_Users = (props: Props) => {
           subtitle="Are you sure you want to delete this item?"
           confirmLabel="Delete"
           cancelLabel="Cancel"
-          onConfirm={confirmDelete}
-        />
+          value={userData}
+             />
       </div>
     </div>
   );
