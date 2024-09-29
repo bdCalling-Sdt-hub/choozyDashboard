@@ -1,4 +1,5 @@
 import { Button } from "antd"
+import React from "react";
 import { IoIosArrowBack } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 
@@ -7,7 +8,7 @@ const SettingsTermsAndConditions = () => {
     const navigate = useNavigate();
 
     const handleBackSettings = () => {
-        navigate('/settings')
+        navigate('/settings/personalInformation')
     }
 
     const handleEdit = () => {

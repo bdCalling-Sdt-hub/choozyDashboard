@@ -32,7 +32,9 @@ const EditTermsAndCondition: React.FC = () => {
     setContent(data?.data?.attributes?.content || "");
   }, []);
 
-  const setData = async (newData: { content: string }): Promise<ApiResponse> => {
+  const setData = async (newData: {
+    content: string;
+  }): Promise<ApiResponse> => {
     // Mock API response (replace with actual API call)
     return new Promise((resolve) => {
       setTimeout(() => {
@@ -48,30 +50,37 @@ const EditTermsAndCondition: React.FC = () => {
 
   const handleUpdate = async () => {
     console.log(content);
+    Swal.fire({
+      position: 'top',                // Use valid SweetAlertPosition
+      icon: 'success',                 // Use valid SweetAlertIcon
+      showConfirmButton: false,
+      timer: 1500
+    });
+    navigate("/settings/termsAndCondition");
 
-    try {
-      const response = await setData({
-        content: content,
-      });
+    // try {
+    //   const response = await setData({
+    //     content: content,
+    //   });
 
-      if (response?.data?.statusCode === 201) {
-        Swal.fire({
-          position: "top-center",
-          icon: "success",
-          title: response?.data?.message,
-          showConfirmButton: false,
-          timer: 1500,
-        });
-        navigate("/settings/terms-conditions");
-      }
-    } catch (error: any) {
-      Swal.fire({
-        icon: "error",
-        title: "Try Again...",
-        text: error?.response?.data?.message || "An error occurred",
-        footer: '<a href="#">Why do I have this issue?</a>',
-      });
-    }
+    //   if (response?.data?.statusCode === 201) {
+    //     Swal.fire({
+    //       position: "top-center",
+    //       icon: "success",
+    //       title: response?.data?.message,
+    //       showConfirmButton: false,
+    //       timer: 1500,
+    //     });
+    //     navigate("/settings/terms-conditions");
+    //   }
+    // } catch (error: any) {
+    //   Swal.fire({
+    //     icon: "error",
+    //     title: "Try Again...",
+    //     text: error?.response?.data?.message || "An error occurred",
+    //     footer: '<a href="#">Why do I have this issue?</a>',
+    //   });
+    // }
   };
 
   const handleBackTermsAndCondition = () => {
@@ -93,7 +102,6 @@ const EditTermsAndCondition: React.FC = () => {
           value={content}
           onChange={(newContent) => setContent(newContent)}
           className="text-wrap bg-red-900"
-          
         />
         <Button
           onClick={handleUpdate}

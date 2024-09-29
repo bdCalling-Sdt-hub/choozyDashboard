@@ -7,7 +7,7 @@ import { UserOutlined, EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icon
 type FileType = Exclude<Parameters<UploadProps['beforeUpload']>[0], undefined>; // Correct type for File
 
 interface FieldType {
-  name?: string;
+  name?: any;
   username?: string;
   password?: string;
   remember?: boolean;
@@ -49,13 +49,13 @@ const Settings_personalInformation: React.FC = () => {
       <div className='flex justify-center mb-6'>
         <ImgCrop rotationSlider>
           <Upload
-            action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
+            // action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
             listType="picture-card"
             fileList={fileList}
             onChange={onChange}
             onPreview={onPreview}
           >
-            {fileList.length < 5 && '+ Upload'}
+            {fileList.length < 1 && '+ Upload'}
           </Upload>
         </ImgCrop>
       </div>
@@ -65,16 +65,16 @@ const Settings_personalInformation: React.FC = () => {
         name="basic"
         layout="vertical"
         style={{ width: '100%', maxWidth: '800px', marginTop: "50px" }} // Ensures the form and its elements are centered
-        initialValues={{ remember: true }}
+        initialValues={{ name:""}}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         autoComplete="off"
       >
         <Form.Item<FieldType>
-          name="username"
+          name="email"
           rules={[{ required: true, message: 'Please input your username!' }]}
         >
-          <Input placeholder='User Name' className='h-12' prefix={<UserOutlined />} />
+          <Input placeholder='Email' className='h-12' value="Jillur" />
         </Form.Item>
 
         <Form.Item<FieldType>

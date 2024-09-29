@@ -87,8 +87,6 @@ const TransactionTable: React.FC<ProductListingProps> = () => {
       dataIndex: "status",
       key: "status",
     },
-        
-    
   ];
 
   const handlePage = (page: number) => {
@@ -128,9 +126,9 @@ const TransactionTable: React.FC<ProductListingProps> = () => {
   };
 
   return (
-    <div className="mt-2">
+    <div className="mt-2 bg-[#FAFAFA]">
       <div className="flex justify-between w-full">
-        <div>
+        <div className="pl-4 py-3">
           <h1 className="text-xl font-bold text-[#5D5D5D]">Overview</h1>
           <p className="text-[#5D5D5D]">Activities summary at a glance</p>
         </div>

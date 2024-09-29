@@ -5,59 +5,27 @@ import image from "../assets/Images/Notifications/Avatar.png";
 import ModalComponent from "../component/share/ModalComponent";
 import { Link } from "react-router-dom";
 
-interface UserAction {
-  sId: number;
-  image: React.ReactNode;
-  name: string;
-  email: string;
-  status: string;
-  dateOfBirth: string;
-  contact: string;
-  role: string;
-  value: any;
-}
-
-interface UserData {
-  sId: number;
-  image: React.ReactNode;
-  name: string;
-  email: string;
-  status: string;
-  action: UserAction;
-  role: string;
-  value: any;
-}
-
-interface ManageUsersProps {}
-
-const Manage_Users = (props: Props) => {
+const Manage_Users = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [openModel, setOpenModel] = useState<boolean>(false);
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
-  const [userData, setUserData] = useState<UserAction>({} as UserAction);
-  const [type, setType] = useState<string>("");
-  const [role, setRole] = useState<string>("Admin"); 
+  const [userData, setUserData] = useState<UserAction | null>(null);
+  const [role, setRole] = useState<string>("");
 
   const pageSize = 10;
 
   const data: UserData[] = [...Array(9).keys()].map((item, index) => ({
     sId: index + 1,
     image: <img src={image} className="w-9 h-9 rounded" alt="avatar" />,
-    name: "KTM 390Duke",
-    role: "Admin",
-    price: "$6729.00",
-    quantity: "Quantity",
-    status: "Approved",
+    name: "User " + (index + 1),
+    role: index % 2 === 0 ? "Admin" : "Member", // Dynamic role for each user
     action: {
       sId: index + 1,
       image: <img src={image} className="w-9 h-9 rounded" alt="" />,
-      name: "Fahim",
-      category: "Category",
-      price: "$6729.00",
-      quantity: "quantity",
-      status: "Approved",
+      name: "User " + (index + 1),
       dateOfBirth: "24-05-2024",
       contact: "0521545861520",
+      role: index % 2 === 0 ? "Admin" : "Member", // Assign role dynamically
     },
   }));
 
@@ -68,12 +36,14 @@ const Manage_Users = (props: Props) => {
       key: "image",
       render: (_: any, record: UserData) => (
         <div className="flex items-center">
-        {record.image}
-        {/* Wrap the name with Link to make it clickable */}
-        <Link to={`seller-profile/${record.sId}`} className="ml-3 text-blue-500 hover:underline">
-          {record.name}
-        </Link>
-      </div>
+          {record.image}
+          <Link
+            to={`seller-profile/${record.sId}`}
+            className="ml-3 text-blue-500 hover:underline"
+          >
+            {record.name}
+          </Link>
+        </div>
       ),
     },
     {
@@ -81,21 +51,6 @@ const Manage_Users = (props: Props) => {
       dataIndex: "role",
       key: "role",
     },
-    // {
-    //   title: "Price",
-    //   dataIndex: "price",
-    //   key: "price",
-    // },
-    // {
-    //   title: "Quantity",
-    //   dataIndex: "quantity",
-    //   key: "quantity",
-    // },
-    // {
-    //   title: "Status",
-    //   dataIndex: "status",
-    //   key: "status",
-    // },
     {
       title: <div className="text-right">Action</div>,
       dataIndex: "action",
@@ -108,12 +63,12 @@ const Manage_Users = (props: Props) => {
           >
             <Pencil />
           </button>
-          {/* <button
+          <button
             onClick={() => handleDelete(record.action)}
             className="bg-secondary px-3 py-1 rounded hover:bg-primary"
           >
             <Trash />
-          </button> */}
+          </button>
         </div>
       ),
     },
@@ -123,27 +78,27 @@ const Manage_Users = (props: Props) => {
     setCurrentPage(page);
   };
 
-  const handleUser = (values: UserAction) => {
-    setUserData(values);
+  const handleUser = (action: UserAction) => {
+    setUserData(action);
+    setRole(action.role); // Set the role dynamically based on user action data
     setOpenModel(true);
-    setType("user");
   };
 
-  const handleDelete = (values: UserAction) => {
-    setUserData(values);
+  const handleDelete = (action: UserAction) => {
+    setUserData(action);
     setOpenDeleteModal(true);
   };
 
   const confirmApprove = () => {
-    console.log("Approved:", userData);
+    console.log("Approved:", userData, role);
     setOpenModel(false);
-    // Add approve logic here
+    // Add your approve logic here
   };
 
   const confirmDelete = () => {
     console.log("Deleted:", userData);
     setOpenDeleteModal(false);
-    // Add delete logic here
+    // Add your delete logic here
   };
 
   return (
@@ -169,18 +124,23 @@ const Manage_Users = (props: Props) => {
           }}
           rowClassName={() => "hover:bg-transparent"}
         />
+        
+        {/* Approve Modal */}
         <ModalComponent
           openModel={openModel}
           setOpenModel={setOpenModel}
           title="User role"
-          subtitle=""
+          subtitle="This is the current role of the selected user"
           cancelLabel="Cancel"
-          role={role}
-          setRole={setRole}
+          role={role} // Pass the selected role
+          setRole={setRole} // Function to change the role
+          showRoleSelect={true} // Show the role select in this modal
           confirmLabel="Save Changes"
-          onConfirm={confirmApprove} // Your approve logic
-          value={userData}       />
+          onConfirm={confirmApprove}
+          value={userData} // Passing dynamic user data
+        />
 
+        {/* Delete Modal */}
         <ModalComponent
           openModel={openDeleteModal}
           setOpenModel={setOpenDeleteModal}
@@ -188,8 +148,9 @@ const Manage_Users = (props: Props) => {
           subtitle="Are you sure you want to delete this item?"
           confirmLabel="Delete"
           cancelLabel="Cancel"
-          value={userData}
-             />
+          value={userData} // Passing dynamic user data
+          onConfirm={confirmDelete}
+        />
       </div>
     </div>
   );

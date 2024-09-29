@@ -6,6 +6,7 @@ import SelectBox from "../component/share/SelectBox";
 import SellerActivityChart from "../component/manageUsers/SellerActivityChart";
 import CustomTable from "../component/share/CustomTable";
 import ModalComponent from "../component/share/ModalComponent";
+import { useNavigate } from "react-router-dom";
 
 type Props = {};
 interface UserAction {
@@ -153,11 +154,14 @@ const Seller_Profile = (props: Props) => {
     setOpenDeleteModal(false);
     // Add delete logic here
   };
-
+const navigate = useNavigate()
+const handleBack = () => {
+  navigate('/manage-users')
+}
   return (
     <div>
       <div className="flex justify-between w-full">
-        <div className="flex">
+        <div onClick={handleBack} className="flex cursor-pointer">
           <ChevronLeft />
           <h1>Seller Profile</h1>
         </div>
@@ -176,7 +180,7 @@ const Seller_Profile = (props: Props) => {
       <div className="flex gap-2 h-36 items-center justify-center mt-28">
         <div className="w-1/2 h-[350px] items-center justify-center py-8 bg-white rounded-2xl">
           <div className="mx-auto text-center items-center">
-            <img src={image} className="w-9 h-9 rounded mx-auto" alt="" />
+            <img src={image} className="w-24 h-24 rounded mx-auto" alt="" />
             <h1 className="text-xl font-bold py-2">Hasan Mahmud</h1>
             <p className="">Location: Times square, USA</p>
             <p> hasanmahmud@gmail.com</p>

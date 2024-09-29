@@ -236,3 +236,9 @@ border-color: transparent !important;
   color: #a19e9e !important;
 }
 
+/* Faq */
+
+.ant-collapse-arrow{
+  padding-top: 10px !important;
+  /* margin-top: 50px !important; */
+}

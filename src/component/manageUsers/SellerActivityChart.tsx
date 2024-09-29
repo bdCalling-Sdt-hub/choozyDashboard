@@ -13,52 +13,82 @@ import {
 type Props = {};
 const data = [
   {
-    name: "Page A",
-    uv: 4000,
-    pv: 2400,
+    name: "Jan",
+    Sales: 4000,
+    Purchages: 2400,
     amt: 2400,
   },
   {
-    name: "Page B",
-    uv: 3000,
-    pv: 1398,
+    name: "Feb",
+    Sales: 3000,
+    Purchages: 1398,
     amt: 2210,
   },
   {
-    name: "Page C",
-    uv: 2000,
-    pv: 9800,
+    name: "Mar",
+    Sales: 2000,
+    Purchages: 9800,
     amt: 2290,
   },
   {
-    name: "Page D",
-    uv: 2780,
-    pv: 3908,
+    name: "Apr",
+    Sales: 2780,
+    Purchages: 3908,
     amt: 2000,
   },
   {
-    name: "Page E",
-    uv: 1890,
-    pv: 4800,
+    name: "May",
+    Sales: 1890,
+    Purchages: 4800,
     amt: 2181,
   },
   {
-    name: "Page F",
-    uv: 2390,
-    pv: 3800,
+    name: "Jun",
+    Sales: 2390,
+    Purchages: 3800,
     amt: 2500,
   },
   {
-    name: "Page G",
-    uv: 3490,
-    pv: 4300,
+    name: "Jul",
+    Sales: 3490,
+    Purchages: 4300,
+    amt: 2100,
+  },
+  {
+    name: "Aug",
+    Sales: 3490,
+    Purchages: 4300,
+    amt: 2100,
+  },
+  {
+    name: "Sep",
+    Sales: 3490,
+    Purchages: 4300,
+    amt: 2100,
+  },
+  {
+    name: "Oct",
+    Sales: 3490,
+    Purchages: 4300,
+    amt: 2100,
+  },
+  {
+    name: "Nov",
+    Sales: 3490,
+    Purchages: 4300,
+    amt: 2100,
+  },
+  {
+    name: "Dec",
+    Sales: 3490,
+    Purchages: 4300,
     amt: 2100,
   },
 ];
 const SellerActivityChart = (props: Props) => {
   const [opacity, setOpacity] = React.useState({
-    uv: 1,
-    pv: 1,
+    Sales: 1,
+    Purchages: 1,
   });
 
   const handleMouseEnter = (o) => {
@@ -94,8 +124,8 @@ const SellerActivityChart = (props: Props) => {
         <YAxis />
         <Tooltip />
         <Legend onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} />
-        <Line type="monotone" dataKey="pv" strokeOpacity={opacity.pv} stroke="#8884d8" activeDot={{ r: 8 }} />
-        <Line type="monotone" dataKey="uv" strokeOpacity={opacity.uv} stroke="#82ca9d" />
+        <Line type="monotone" dataKey="Purchages" strokeOpacity={opacity.Purchages} stroke="#8884d8" activeDot={{ r: 8 }} />
+        <Line type="monotone" dataKey="Sales" strokeOpacity={opacity.Sales} stroke="#82ca9d" />
       </LineChart>
     </ResponsiveContainer>
     {/* <p className="notes">Tips: Hover the legend !</p> */}

@@ -63,7 +63,7 @@ const SettingsFaq: React.FC = () => {
           />
         </div>
       ) : (
-        <div>
+        <div className='items-center'>
           <span>{panelData[key as keyof typeof panelData].label}</span>
           <Button onClick={() => handleEdit(key)} type="link" className="ml-2">
             Edit
