@@ -9,4 +9,4 @@ const getAllProductListApi = baseApi.injectEndpoints({
     })
 })
 
-export const {useGetAllProductListQuery} = getAllProductListApi;
+export const {useAllProductListQuery} = getAllProductListApi;

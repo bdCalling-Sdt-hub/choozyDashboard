@@ -3,6 +3,10 @@ import React, { useState } from "react";
 import image from "../assets/Images/Notifications/Avatar.png";
 import { Trash, Search, Pencil } from "lucide-react";
 import ModalComponent from "../component/share/ModalComponent";
+import { useAllProductListQuery } from "../redux/features/getAllProductListApi";
+import { usePutApprovedMutation } from "../redux/features/putProductApprovedApi";
+import { usePutCancelMutation } from "../redux/features/putCancelProduct";
+import { usePutPendingMutation } from "../redux/features/putPendingProductApi";
 
 interface UserAction {
   sId: number;
@@ -31,25 +35,30 @@ const ProductListing: React.FC<ProductListingProps> = () => {
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
   const [userData, setUserData] = useState<UserAction>({} as UserAction);
   const [type, setType] = useState<string>("");
+  const [putApproved] = usePutApprovedMutation();
+  const [ putCancel] = usePutCancelMutation();
+  const [putPending] = usePutPendingMutation()
+    const {data:userLists, isLoading, isError} = useAllProductListQuery();
+  console.log("37",userLists)
 
   const pageSize = 10;
 
-  const data: UserData[] = [...Array(9).keys()].map((item, index) => ({
-    sId: index + 1,
-    image: <img src={image} className="w-9 h-9 rounded" alt="avatar" />,
-    name: "KTM 390Duke",
-    category: "Vehicle",
-    price: "$6729.00",
+  const data= userLists?.data?.data?.map((item, index) => ({
+    sId: item?.id,
+    image: <img src={item?.image} className="w-9 h-9 rounded" alt="avatar" />,
+    name: item?.product_name,
+    category: item?.product_category,
+    price: item?.price,
     quantity: "Quantity",
-    status: "Approved",
+    status: item?.product_status,
     action: {
-      sId: index + 1,
-      image: <img src={image} className="w-9 h-9 rounded" alt="" />,
-      name: "Fahim",
-      category: "Category",
-      price: "$6729.00",
-      quantity: "quantity",
-      status: "Approved",
+      sId: item?.id,
+    image: <img src={item?.image} className="w-9 h-9 rounded" alt="avatar" />,
+    name: item?.product_name,
+    category: item?.product_category,
+    price: item?.price,
+    quantity: "Quantity",
+    status: item?.product_status,
       dateOfBirth: "24-05-2024",
       contact: "0521545861520",
     },
@@ -77,11 +86,11 @@ const ProductListing: React.FC<ProductListingProps> = () => {
       dataIndex: "price",
       key: "price",
     },
-    {
-      title: "Quantity",
-      dataIndex: "quantity",
-      key: "quantity",
-    },
+    // {
+    //   title: "Quantity",
+    //   dataIndex: "quantity",
+    //   key: "quantity",
+    // },
     {
       title: "Status",
       dataIndex: "status",
@@ -125,16 +134,35 @@ const ProductListing: React.FC<ProductListingProps> = () => {
     setOpenDeleteModal(true);
   };
 
-  const confirmApprove = () => {
+  const confirmApprove =async () => {
     console.log("Approved:", userData);
     setOpenModel(false);
-    // Add approve logic here
+    await putApproved({
+      id: userData?.sId,
+      _method: "PUT"
+    })
+  };
+  const confirmCancel =async () => {
+    console.log("Approved:", userData);
+    setOpenModel(false);
+    await putCancel({
+      id: userData?.sId,
+      _method: "PUT"
+    })
+  };
+  const confirmPending =async () => {
+    console.log("Approved:", userData);
+    setOpenModel(false);
+    await putPending({
+      id: userData?.sId,
+      _method: "PUT"
+    })
   };
 
-  const confirmDelete = () => {
+  const confirmDelete =async () => {
     console.log("Deleted:", userData);
     setOpenDeleteModal(false);
-    // Add delete logic here
+   
   };
 
   return (
@@ -167,8 +195,11 @@ const ProductListing: React.FC<ProductListingProps> = () => {
           setOpenModel={setOpenModel}
           title="Approve Item"
           subtitle="Are you sure you want to approve the product?"
+          pendingLabel="Pending"
           cancelLabel="Cancel"
           confirmLabel="Approve"
+          onPending={confirmPending}
+          onCancel={confirmCancel}
           onConfirm={confirmApprove} // Your approve logic
         />
 

@@ -18,8 +18,10 @@ interface ModalComponentProps {
   subtitle: string;
   cancelLabel?: string;
   confirmLabel?: string;
+  pendingLabel?: string;
   onCancel?: () => void;
   onConfirm?: () => void;
+  onPending: () => void;
   children?: React.ReactNode;
   role?: string; // The role to display or change
   setRole?: (role: string) => void; // Function to change the role
@@ -35,8 +37,10 @@ const ModalComponent: React.FC<ModalComponentProps> = ({
   subtitle,
   cancelLabel = "Cancel",
   confirmLabel = "Confirm",
+  pendingLabel="Pending",
   onCancel,
   onConfirm,
+  onPending,
   children,
   role, // The selected role
   setRole, // Function to set the role dynamically
@@ -50,7 +54,11 @@ const ModalComponent: React.FC<ModalComponentProps> = ({
 
   const handleApprove = () => {
     if (onConfirm) onConfirm();
-    hideModal();
+    // hideModal();
+  };
+  const handlePending = () => {
+    if (onPending) onPending();
+    // hideModal();
   };
 
   const [inputValue, setInputValue] = useState(1);
@@ -140,6 +148,18 @@ const ModalComponent: React.FC<ModalComponentProps> = ({
           }}
         >
           {cancelLabel}
+        </Button>
+
+        <Button
+          onClick={handlePending}
+          style={{
+            backgroundColor: "white",
+            color: "#000",
+            border: "1px solid #d9d9d9",
+            marginRight: "10px",
+          }}
+        >
+          { pendingLabel}
         </Button>
         <Button type="primary" onClick={handleApprove}>
           {confirmLabel}
