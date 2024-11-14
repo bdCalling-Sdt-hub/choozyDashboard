@@ -4,6 +4,7 @@ import image from "../../assets/Images/Notifications/Avatar.png";
 import { Trash, Search, Pencil } from "lucide-react";
 import ModalComponent from "../share/ModalComponent";
 import SelectBox from "../share/SelectBox";
+import { useAllTransactionQuery } from "../../redux/features/getAllTransactions";
 
 interface UserAction {
   sId: number;
@@ -33,30 +34,31 @@ const TransactionTable: React.FC<ProductListingProps> = () => {
   const [userData, setUserData] = useState<UserAction>({} as UserAction);
   const [type, setType] = useState<string>("");
   const [selectedValue, setSelectedValue] = useState<string | undefined>();
+  const {data:allTansacntion} = useAllTransactionQuery();
+  console.log("38", allTansacntion?.data?.transitions)
 
   const pageSize = 10;
 
-  const data: UserData[] = [...Array(9).keys()].map((item, index) => ({
-    name: "Sam",
-    sId: index + 1,
-    image: <img src={image} className="w-9 h-9 rounded" alt="avatar" />,
-    date: "9-24-204",
+  const data= allTansacntion?.data?.transitions.map((item, index) => ({
+    name: item?.user?.full_name,
+    sId: item?.id,
+    image: <img src={item?.user?.image} className="w-9 h-9 rounded" alt="avatar" />,
+    date: item?.created_at?.split(" ")[0],
     purchasedProduct: "iMac air 2017",
     category: "Vehicle",
-    amount: "$6729.00",
-    quantity: "Quantity",
-    status: "Approved",
+    amount: item?.amount,
+    paymentMethod: item?.payment_method,
+    status: item?.status,
     action: {
-      sId: index + 1,
-      image: <img src={image} className="w-9 h-9 rounded" alt="" />,
-      name: "Fahim",
-      category: "Category",
-      amount: "$6729.00",
-      quantity: "quantity",
-      status: "Approved",
-      date: "9-24-204",
-      purchasedProduct: "iMac air 2017",
-      contact: "0521545861520",
+      name: item?.user?.full_name,
+    sId: item?.id,
+    image: <img src={item?.user?.image} className="w-9 h-9 rounded" alt="avatar" />,
+    date: item?.created_at?.split(" ")[0],
+    purchasedProduct: "iMac air 2017",
+    category: "Vehicle",
+    amount: item?.amount,
+    paymentMethod: item?.payment_method,
+    status: item?.status,
     },
   }));
 
@@ -72,9 +74,9 @@ const TransactionTable: React.FC<ProductListingProps> = () => {
       key: "name",
     },
     {
-      title: "Purchased Product ",
-      dataIndex: "purchasedProduct",
-      key: "purchasedProduct",
+      title: "Payment Method",
+      dataIndex: "paymentMethod",
+      key: "paymentMethod",
     },
 
     {

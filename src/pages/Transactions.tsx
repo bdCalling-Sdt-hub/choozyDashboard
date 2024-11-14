@@ -7,7 +7,7 @@ type Props = {}
 const Transactions = (props: Props) => {
   return (
     <div>
-      <TransactionsStatus />
+      {/* <TransactionsStatus /> */}
       <TransactionTable />
     </div>
   )

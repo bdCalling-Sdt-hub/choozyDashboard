@@ -1,20 +1,55 @@
-import React, { useState } from 'react';
-import { Upload, Input, Button, Form } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Upload, Input, Button, Form, message } from 'antd';
 import type { UploadFile, UploadProps, FormProps } from 'antd';
 import ImgCrop from 'antd-img-crop';
-import { UserOutlined, EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
+import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
+import { useGetPersonalInformationQuery } from '../redux/features/getPersonalInformationApi';
+import { useUpdatePersonalInformationMutation } from '../redux/features/putUpdatePersonalInfromation';
 
-type FileType = Exclude<Parameters<UploadProps['beforeUpload']>[0], undefined>; // Correct type for File
+type FileType = Exclude<Parameters<UploadProps['beforeUpload']>[0], undefined>;
 
 interface FieldType {
-  name?: any;
-  username?: string;
+  name?: string;
+  email?: string;
   password?: string;
-  remember?: boolean;
+  oldPassword?: string;
+  newPassword?: string;
+  confirmPassword?: string;
 }
 
-const Settings_personalInformation: React.FC = () => {
+const SettingsPersonalInformation: React.FC = () => {
   const [fileList, setFileList] = useState<UploadFile[]>([]);
+  const [previewImage, setPreviewImage] = useState<string | undefined>(undefined);
+  const [form] = Form.useForm();
+
+  // Fetch personal information data
+  const { data, isLoading, isError } = useGetPersonalInformationQuery();
+  const [updatePersonalInformation] = useUpdatePersonalInformationMutation();
+console.log("28", data);
+  useEffect(() => {
+    if (data && data.data) {
+      form.setFieldsValue({
+        name: data.data.full_name,
+        email: data.data.email,
+      });
+
+      if (data.data.image) {
+        const imageUrl = data.data.image;
+        console.log(imageUrl);
+        setFileList([
+          {
+            uid: '-1',
+            name: 'profile.png',
+            status: 'done',
+            url: imageUrl,
+          } as UploadFile,
+        ]);
+        setPreviewImage(imageUrl);
+      }
+    } else if (isError) {
+      message.error("Failed to load personal information");
+    }
+  }, [data, isError, form]);
 
   const onChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
     setFileList(newFileList);
@@ -35,8 +70,31 @@ const Settings_personalInformation: React.FC = () => {
     imgWindow?.document.write(image.outerHTML);
   };
 
-  const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
-    console.log('Success:', values);
+  const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
+    if (!fileList.length || !fileList[0].originFileObj) {
+      message.error("Please upload a profile image");
+      return;
+    }
+
+    // Create a FormData object and append form values
+    const formData = new FormData();
+    formData.append("_method", "PUT");
+    formData.append("full_name", values.name || "");
+    formData.append("old_password", values.oldPassword || "");
+    formData.append("new_password", values.newPassword || "");
+    formData.append("confirm_password", values.confirmPassword || "");
+
+    // Append the image file as a File object
+    const imageFile = fileList[0].originFileObj as File;
+    formData.append("image", imageFile, imageFile.name);
+
+    try {
+     const response = await updatePersonalInformation(formData);
+      message.success("Profile updated successfully", );
+      console.log("FormData content:",response, Array.from(formData.entries()));
+    } catch (error) {
+      message.error("Failed to update profile");
+    }
   };
 
   const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (errorInfo) => {
@@ -45,11 +103,9 @@ const Settings_personalInformation: React.FC = () => {
 
   return (
     <div className='border border-gray-200 h-[80vh] py-12 rounded-2xl flex flex-col items-center'>
-      {/* Upload section */}
       <div className='flex justify-center mb-6'>
         <ImgCrop rotationSlider>
           <Upload
-            // action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
             listType="picture-card"
             fileList={fileList}
             onChange={onChange}
@@ -58,64 +114,64 @@ const Settings_personalInformation: React.FC = () => {
             {fileList.length < 1 && '+ Upload'}
           </Upload>
         </ImgCrop>
+        
       </div>
-
-      {/* Input Form */}
       <Form
         name="basic"
+        form={form}
         layout="vertical"
-        style={{ width: '100%', maxWidth: '800px', marginTop: "50px" }} // Ensures the form and its elements are centered
-        initialValues={{ name:""}}
+        style={{ width: '100%', maxWidth: '800px', marginTop: "50px" }}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         autoComplete="off"
       >
         <Form.Item<FieldType>
-          name="email"
-          rules={[{ required: true, message: 'Please input your username!' }]}
+          name="name"
+          label="Name"
+          rules={[{ required: false, message: 'Please input your name!' }]}
         >
-          <Input placeholder='Email' className='h-12' value="Jillur" />
+          <Input placeholder="Name" className='h-12' />
         </Form.Item>
-
+        <Form.Item<FieldType>
+          name="email"
+          label="Email"
+          rules={[{ required: true, message: 'Please input your email!' }]}
+        >
+          <Input placeholder="Email" className='h-12' />
+        </Form.Item>
         <Form.Item<FieldType>
           name="oldPassword"
+          label="Old Password"
           rules={[{ required: true, message: 'Please input your old password!' }]}
         >
           <Input.Password
             placeholder='Old Password'
             className='h-12'
-            iconRender={(visible) =>
-              visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
-            }
+            iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
           />
         </Form.Item>
-
         <Form.Item<FieldType>
           name="newPassword"
+          label="New Password"
           rules={[{ required: true, message: 'Please input your new password!' }]}
         >
           <Input.Password
             placeholder='New Password'
             className='h-12'
-            iconRender={(visible) =>
-              visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
-            }
+            iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
           />
         </Form.Item>
-
         <Form.Item<FieldType>
           name="confirmPassword"
+          label="Confirm Password"
           rules={[{ required: true, message: 'Please confirm your password!' }]}
         >
           <Input.Password
             placeholder='Confirm Password'
             className='h-12'
-            iconRender={(visible) =>
-              visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
-            }
+            iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
           />
         </Form.Item>
-
         <Form.Item>
           <Button type="primary" className='w-full h-12 bg-[#4964C6]' htmlType="submit">
             Edit
@@ -126,4 +182,4 @@ const Settings_personalInformation: React.FC = () => {
   );
 };
 
-export default Settings_personalInformation;
+export default SettingsPersonalInformation;

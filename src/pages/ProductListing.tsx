@@ -1,4 +1,4 @@
-import { Input, Table } from "antd";
+import { Input, Modal, Table } from "antd";
 import React, { useState } from "react";
 import image from "../assets/Images/Notifications/Avatar.png";
 import { Trash, Search, Pencil } from "lucide-react";
@@ -202,7 +202,7 @@ const ProductListing: React.FC<ProductListingProps> = () => {
           onCancel={confirmCancel}
           onConfirm={confirmApprove} // Your approve logic
         />
-
+{/* 
         <ModalComponent
           openModel={openDeleteModal}
           setOpenModel={setOpenDeleteModal}
@@ -211,7 +211,19 @@ const ProductListing: React.FC<ProductListingProps> = () => {
           confirmLabel="Delete"
           cancelLabel="Cancel"
           onConfirm={confirmDelete} // Your delete logic
-        />
+        /> */}
+        {/* Modal for delete confirmation using Ant Design Modal */}
+        <Modal
+          title="Delete Item"
+          visible={openDeleteModal}
+          onOk={confirmDelete}
+          onCancel={() => setOpenDeleteModal(false)}
+          okText="Delete"
+          cancelText="Cancel"
+        >
+          <p>Are you sure you want to delete this item?</p>
+        </Modal>
+
       </div>
     </div>
   );

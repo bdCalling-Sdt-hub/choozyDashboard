@@ -1,9 +1,10 @@
 import { Input, Table } from "antd";
-import { Pencil, Search, Trash } from "lucide-react";
+import { Eye, Pencil, Search, Trash } from "lucide-react";
 import React, { useState } from "react";
 import image from "../assets/Images/Notifications/Avatar.png";
 import ModalComponent from "../component/share/ModalComponent";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom"; // Update here
+import { useGetAllUsersQuery } from "../redux/features/getAllUsersApi";
 
 const Manage_Users = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -11,20 +12,28 @@ const Manage_Users = () => {
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
   const [userData, setUserData] = useState<UserAction | null>(null);
   const [role, setRole] = useState<string>("");
-
+  const { data: allUsers, isLoading, isError } = useGetAllUsersQuery();
+  
+  const navigate = useNavigate(); // Use useNavigate instead of useNavigation
+  
+  console.log("allUsers", allUsers);
+  console.log("userdata", userData);
+  
   const pageSize = 10;
 
-  const data: UserData[] = [...Array(9).keys()].map((item, index) => ({
-    sId: index + 1,
-    image: <img src={image} className="w-9 h-9 rounded" alt="avatar" />,
-    name: "User " + (index + 1),
+  const data: UserData[] = allUsers?.data?.map((item, index) => ({
+    sId: item?.id,
+    image: <img src={item?.image} className="w-9 h-9 rounded" alt="avatar" />,
+    name: item?.full_name,
+    email: item?.email,
+    userName: item?.user_name,
     role: index % 2 === 0 ? "Admin" : "Member", // Dynamic role for each user
     action: {
-      sId: index + 1,
-      image: <img src={image} className="w-9 h-9 rounded" alt="" />,
-      name: "User " + (index + 1),
-      dateOfBirth: "24-05-2024",
-      contact: "0521545861520",
+      sId: item?.id,
+      image: <img src={item?.image} className="w-9 h-9 rounded" alt="avatar" />,
+      name: item?.full_name,
+      email: item?.email,
+      userName: item?.user_name,
       role: index % 2 === 0 ? "Admin" : "Member", // Assign role dynamically
     },
   }));
@@ -47,9 +56,14 @@ const Manage_Users = () => {
       ),
     },
     {
-      title: "Role",
-      dataIndex: "role",
-      key: "role",
+      title: "User Name",
+      dataIndex: "userName",
+      key: "userName",
+    },
+    {
+      title: "Email",
+      dataIndex: "email",
+      key: "email",
     },
     {
       title: <div className="text-right">Action</div>,
@@ -58,10 +72,10 @@ const Manage_Users = () => {
       render: (_: any, record: UserData) => (
         <div className="flex items-center justify-end gap-3">
           <button
-            onClick={() => handleUser(record.action)}
+            onClick={() => handleUserDetail(record.action)}
             className="hover:bg-primary p-1 rounded bg-blue"
           >
-            <Pencil />
+            <Eye />
           </button>
           <button
             onClick={() => handleDelete(record.action)}
@@ -99,6 +113,11 @@ const Manage_Users = () => {
     console.log("Deleted:", userData);
     setOpenDeleteModal(false);
     // Add your delete logic here
+  };
+
+  const handleUserDetail = (action: UserAction) => {
+    navigate(`/manage-users/seller-profile/${action.sId}`);
+    
   };
 
   return (

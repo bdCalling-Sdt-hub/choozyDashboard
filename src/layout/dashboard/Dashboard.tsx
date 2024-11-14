@@ -54,12 +54,12 @@ const menuItems: MenuItem[] = [
     activeIcon: <FaUserCircle size={18} color="#4964C6" />,
 
   },
-  {
-    path: "/love",
-    title: "Love",
-    icon: <FaRegHeart color="#4964C6" size={18} />,
-    activeIcon: <FaHeart size={18} color="#4964C6" />,
-  },
+  // {
+  //   path: "/love",
+  //   title: "Love",
+  //   icon: <FaRegHeart color="#4964C6" size={18} />,
+  //   activeIcon: <FaHeart size={18} color="#4964C6" />,
+  // },
   {
     path: "/transactions",
     title: "Transactions",
@@ -169,8 +169,14 @@ const Dashboard: React.FC = () => {
         trigger={null}
       >
         <img src={logo} alt="Logo" className="mx-auto py-6 w-[264px]" />
-        <Menu mode="inline" style={{ background: "#1E1E1E", color: "white" }} defaultSelectedKeys={["1"]}>
-          {menuItems.map((item, index) => {
+        <Menu mode="inline" 
+        style={{ background: "#1E1E1E", color: "white" }} 
+        // defaultSelectedKeys={["1"]}
+        selectedKeys={[location.pathname]}
+        >
+         <div className="flex h-[85vh] flex-col justify-between px-4">
+         <div>
+         {menuItems.map((item, index) => {
             const isActive = location.pathname === item.path;
             if (item.children) {
               return (
@@ -219,7 +225,8 @@ const Dashboard: React.FC = () => {
               );
             }
           })}
-          <div className="flex py-36 gap-8 mt-16 px-4 w-full">
+         </div>
+          <div className="flex gap-8 px-4 w-full">
             <div className="flex gap-2 w-3/4 items-center">
               <Popover className="cursor-pointer" placement="top" content={content}>
                 <Avatar style={{ width: "40px", height: "40px", backgroundColor: "gray" }} icon={<User size={25} />} />
@@ -231,6 +238,7 @@ const Dashboard: React.FC = () => {
             </div>
             <Menu.Item key="500" icon={<LogOut size={20} />} style={{ color: "red", fontSize: "16px" }} onClick={handleLogout} />
           </div>
+         </div>
         </Menu>
       </Sider>
 

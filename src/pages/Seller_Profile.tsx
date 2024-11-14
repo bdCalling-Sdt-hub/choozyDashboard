@@ -6,7 +6,8 @@ import SelectBox from "../component/share/SelectBox";
 import SellerActivityChart from "../component/manageUsers/SellerActivityChart";
 import CustomTable from "../component/share/CustomTable";
 import ModalComponent from "../component/share/ModalComponent";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { useGetUserDetailsQuery } from "../redux/features/getUserDetialsApi";
 
 type Props = {};
 interface UserAction {
@@ -36,7 +37,17 @@ const Seller_Profile = (props: Props) => {
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
   const [userData, setUserData] = useState<UserAction>({} as UserAction);
   const [type, setType] = useState<string>("");
+ 
   const pageSize = 3;
+  const { id } = useParams();
+  
+  // Ensure that id is passed as a string (if it's an object)
+  const { data: userDetails, isLoading, isError } = useGetUserDetailsQuery({
+    id: id ? id : null // Only use `id` if it's available
+  });
+
+  console.log(userDetails?.data);
+  console.log("43", id);
 
   const [selectedValue, setSelectedValue] = useState();
   const handleSelectChange = (value: string) => {
@@ -50,28 +61,31 @@ const Seller_Profile = (props: Props) => {
     { value: "3", label: "Last Year" },
   ];
 
-  // React chart section
-
-  const data: UserData[] = [...Array(100).keys()].map((item, index) => ({
-    sId: index + 1,
-    image: <img src={image} className="w-9 h-9 rounded" alt="avatar" />,
-    productName: "KTM 390Duke",
-    productCategory: "Vehicle",
-    price: "$6729.00",
-    quantity: "Quantity",
-    // status: "Approved",
+  const data = userDetails?.data?.products.map((item, index) => ({
+    sId: item?.id,
+    image: Array.isArray(item?.product_image) ? (
+      item?.product_image.map((img, idx) => (
+        <div key={idx}>
+          <img src={img} className="w-9 h-9 rounded" alt={`product-image-${idx}`} />
+        </div>
+      ))
+    ) : [],
+    productName: item?.product_name || "KTM 390Duke",  // Adjust with actual field name
+    productCategory: item?.product_category || "Vehicle",  // Adjust with actual field name
+    price: item?.price || "$6729.00",  // Adjust with actual field name
+    quantity: item?.quantity || "Quantity",  // Adjust with actual field name
     action: {
       sId: index + 1,
-      image: <img src={image} className="w-9 h-9 rounded" alt="" />,
-      productName: "KTM 390Duke",
-      productCategory: "Vehicle",
-      price: "$6729.00",
-      quantity: "quantity",
-      // status: "Approved",
+      image: <img src={item?.product_image?.[0]} className="w-9 h-9 rounded" alt="product-image" />, // Display first image in the action section
+      productName: item?.product_name || "KTM 390Duke",  // Adjust with actual field name
+      productCategory: item?.product_category || "Vehicle",  // Adjust with actual field name
+      price: item?.price || "$6729.00",  // Adjust with actual field name
+      quantity: item?.quantity || "Quantity",  // Adjust with actual field name
       dateOfBirth: "24-05-2024",
       contact: "0521545861520",
     },
   }));
+  
 
   const columns = [
     {
@@ -80,7 +94,15 @@ const Seller_Profile = (props: Props) => {
       key: "image",
       render: (_: any, record: UserData) => (
         <div className="flex items-center">
-          {record.image}
+          {Array.isArray(record.image) && record.image.length > 0 ? (
+            record.image.map((img, idx) => (
+              <div key={idx} className="mr-2">
+                <img src={img} className="w-9 h-9 rounded" alt={`product-image-${idx}`} />
+              </div>
+            ))
+          ) : (
+            <span>No images available</span>
+          )}
           <span className="ml-3">{record.productName}</span>
         </div>
       ),
@@ -100,23 +122,12 @@ const Seller_Profile = (props: Props) => {
       dataIndex: "quantity",
       key: "quantity",
     },
-    // {
-    //   title: "Status",
-    //   dataIndex: "status",
-    //   key: "status",
-    // },
     {
       title: <div className="text-right">Action</div>,
       dataIndex: "action",
       key: "action",
       render: (_: any, record: UserData) => (
         <div className="flex items-center justify-end gap-3">
-          {/* <button
-            onClick={() => handleUser(record.action)}
-            className="hover:bg-primary p-1 rounded bg-blue"
-          >
-            <Pencil />
-          </button> */}
           <button
             onClick={() => handleDelete(record.action)}
             className="bg-secondary px-3 py-1 rounded hover:bg-primary"
@@ -127,6 +138,7 @@ const Seller_Profile = (props: Props) => {
       ),
     },
   ];
+  
 
   const handlePage = (page: number) => {
     setCurrentPage(page);
@@ -154,21 +166,23 @@ const Seller_Profile = (props: Props) => {
     setOpenDeleteModal(false);
     // Add delete logic here
   };
-const navigate = useNavigate()
-const handleBack = () => {
-  navigate('/manage-users')
-}
+
+  const navigate = useNavigate();
+  const handleBack = () => {
+    navigate('/manage-users');
+  };
+
   return (
     <div>
       <div className="flex justify-between w-full">
         <div onClick={handleBack} className="flex cursor-pointer">
           <ChevronLeft />
-          <h1>Seller Profile</h1>
+          <h1>User Profile</h1>
         </div>
         <div>
           <Input
             prefix={<Search />}
-            className=" rounded-2xl h-12 bg-base border-0 text-primary placeholder:text-gray-200"
+            className="rounded-2xl h-12 bg-base border-0 text-primary placeholder:text-gray-200"
             placeholder="Search for Listing"
             style={{
               backgroundColor: "#f0f0f0",
@@ -177,31 +191,39 @@ const handleBack = () => {
           />
         </div>
       </div>
-      <div className="flex gap-2 h-36 items-center justify-center mt-28">
-        <div className="w-1/2 h-[350px] items-center justify-center py-8 bg-white rounded-2xl">
+      <div className="flex gap-2 h-48 items-center justify-center mt-28">
+        <div className="w-1/2 h-[380px] items-center justify-center py-8 bg-white rounded-2xl">
           <div className="mx-auto text-center items-center">
             <img src={image} className="w-24 h-24 rounded mx-auto" alt="" />
             <h1 className="text-xl font-bold py-2">Hasan Mahmud</h1>
             <p className="">Location: Times square, USA</p>
-            <p> hasanmahmud@gmail.com</p>
+            <p>hasanmahmud@gmail.com</p>
           </div>
-          <div className="grid grid-cols-3 py-12 gap-4 p-4">
-            <div className="border border-gray-200 py-6 4/12 rounded-md px-6 ">
-              <p>Products</p>
-              <h1 className="text-xl font-bold">$4,856</h1>
+          <div className="grid grid-cols-5 gap-4 p-4">
+            <div className="border border-gray-200 py-6 items-center justify-center text-center 4/12 rounded-xl px-6 ">
+              <p>Approved Products</p>
+              <h1 className="text-xl font-bold">{userDetails?.data?.counts?.approvedProduct}</h1>
             </div>
-            <div className="border border-gray-200 py-6 4/12 rounded-md px-6 ">
-              <p>Sells</p>
-              <h1 className="text-xl font-bold">$4,856</h1>
+            <div className="border border-gray-200 py-6 4/12 text-center rounded-xl px-6 ">
+              <p>Cancel Product</p>
+              <h1 className="text-xl font-bold">{userDetails?.data?.counts?.canceledProduct}</h1>
             </div>
-            <div className="border border-gray-200 py-6 4/12 rounded-md px-6 ">
+            <div className="border border-gray-200 py-6 4/12 text-center rounded-xl px-6 ">
               <p>Pending orders</p>
-              <h1 className="text-xl font-bold">$4,856</h1>
+              <h1 className="text-xl font-bold">{userDetails?.data?.counts?.pendingOrders}</h1>
+            </div>
+            <div className="border border-gray-200 py-6 4/12 text-center rounded-xl px-6 ">
+              <p>Pending orders</p>
+              <h1 className="text-xl font-bold">{userDetails?.data?.counts?.pendingProduct}</h1>
+            </div>
+            <div className="border border-gray-200 py-6 4/12 text-center rounded-xl px-6 ">
+              <p>Pending orders</p>
+              <h1 className="text-xl font-bold">{userDetails?.data?.counts?.saleOrders}</h1>
             </div>
           </div>
         </div>
 
-        <div className=" h-[350px] w-1/2 py-4 justify-center bg-white rounded-2xl">
+        <div className="h-[380px] w-1/2 py-4 justify-center bg-white rounded-2xl">
           <div className="flex justify-between w-full px-6">
             <div className="text-lg font-bold">Activities</div>
             <div>
@@ -216,7 +238,7 @@ const handleBack = () => {
           <SellerActivityChart />
         </div>
       </div>
-      <div className="mt-28 bg-white ">
+      <div className="mt-28 bg-white">
         <h1 className="p-4 text-xl font-bold">Product Listing</h1>
         <CustomTable
           dataSource={data}

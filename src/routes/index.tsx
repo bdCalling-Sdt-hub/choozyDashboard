@@ -81,7 +81,7 @@ const router = createBrowserRouter([
                 element: <SettingsTermsAndConditions />
             },
             {
-                path: "settings/termsAndCondition/edittermsAndConditions",
+                path: "/settings/termsAndCondition/edittermsAndConditions/:id",
                 element: <EditTermsAndCondition />
             },
         ]
