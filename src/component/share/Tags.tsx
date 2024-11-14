@@ -1,13 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Input, Tag } from 'antd';
 import type { InputRef } from 'antd';
+import { useAddCategoriesMutation } from '../../redux/features/postAddCategories';
 
 interface TagsProps {
   tags: string[];
   handleAddNewCategory: (newCategory: string) => void;
   handleClose: (removedTag: string) => void;
-  inputVisible: boolean; // Passed from parent to control input visibility
-  setInputVisible: React.Dispatch<React.SetStateAction<boolean>>; // To close the input from child
+  inputVisible: boolean;
+  setInputVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const Tags: React.FC<TagsProps> = ({
@@ -19,25 +20,30 @@ const Tags: React.FC<TagsProps> = ({
 }) => {
   const [inputValue, setInputValue] = useState('');
   const inputRef = useRef<InputRef>(null);
+  const [addCategories] = useAddCategoriesMutation();
 
   useEffect(() => {
     if (inputVisible && inputRef.current) {
-      inputRef.current.focus(); // Focus on the input when it's visible
+      inputRef.current.focus();
     }
   }, [inputVisible]);
 
-  // Handle input changes
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
   };
 
-  // Confirm and add a new tag
-  const handleInputConfirm = () => {
+  const handleInputConfirm = async () => {
     if (inputValue) {
-      handleAddNewCategory(inputValue); // Call the add new category function from parent
+      handleAddNewCategory(inputValue);
+      try {
+        const response = await addCategories({ category_name: inputValue });
+        console.log('Category added', response);
+      } catch (error) {
+        console.error('Failed to add category:', error);
+      }
     }
-    setInputVisible(false); // Hide the input after confirming
-    setInputValue(''); // Clear the input field
+    setInputVisible(false);
+    setInputValue('');
   };
 
   return (
@@ -47,7 +53,7 @@ const Tags: React.FC<TagsProps> = ({
           key={index}
           closable
           onClose={() => handleClose(tag)}
-           className="mb-2 py-1 bg-gray-200 rounded-2xl"
+          className="mb-2 px-4 py-2 bg-gray-200 rounded-xl"
         >
           {tag}
         </Tag>

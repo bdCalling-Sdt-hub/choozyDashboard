@@ -242,3 +242,8 @@ border-color: transparent !important;
   padding-top: 10px !important;
   /* margin-top: 50px !important; */
 }
+
+.ant-tag-close-icon {
+  color: red ! important;
+  padding-left: 5px !important;
+}
