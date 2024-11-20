@@ -19,6 +19,9 @@ import Settings_personalInformation from "../pages/Settings_personalInformation"
 import SettingsFaq from "../pages/SettingsFaq";
 import SettingsTermsAndConditions from "../pages/SettingsTermsAndConditions";
 import EditTermsAndCondition from "../pages/EditTermsAndConditions";
+import RejectionOrder from "../pages/RejectionOrder";
+import AdminRoutes from "./AdminRoutes";
+import ErrorPage from "../pages/ErrorPage";
 
 
 
@@ -31,58 +34,63 @@ const router = createBrowserRouter([
     {
         path: "/",
         element: <Dashboard handleNotifications={handleNotifications} />,
+        errorElement: <ErrorPage />,
         children: [
             {
                 path: "/",
-                element: <DasboardHome />,
+                element: <AdminRoutes><DasboardHome /></AdminRoutes>
             },
             {
                 path: "/notifications",
-                element: <Notifications />,
+                element: <AdminRoutes><Notifications /></AdminRoutes>,
             },
             {
                 path: "/productListing",
-                element: <ProductListing />,
+                element: <AdminRoutes><ProductListing /></AdminRoutes>,
             },
             {
                 path: "/category_management",
-                element: <Category_Management />,
+                element: <AdminRoutes><Category_Management /></AdminRoutes>,
             },
             {
                 path: "/manage-users",
-                element: <Manage_Users />,
+                element: <AdminRoutes><Manage_Users /></AdminRoutes>,
             },
             {
                 path: "/manage-users/seller-profile/:id",
-                element: <Seller_Profile />,
+                element: <AdminRoutes><Seller_Profile /></AdminRoutes>,
             },
             {
                 path: "/love",
-                element: <Love />,
+                element: <AdminRoutes><Love /></AdminRoutes>,
             },
             {
                 path: "/transactions",
-                element: <Transactions />,
+                element: <AdminRoutes><Transactions /></AdminRoutes>,
+            },
+            {
+                path: "/rejectionOrder",
+                element: <AdminRoutes><RejectionOrder /></AdminRoutes>
             },
             {
                 path: "/settings",
-                element: <SettingsPage />,
+                element: <AdminRoutes><SettingsPage /></AdminRoutes>,
             },
             {
                 path: "/settings/personalInformation",
-                element: <Settings_personalInformation />,
+                element: <AdminRoutes><Settings_personalInformation /></AdminRoutes>,
             },
             {
                 path: "/settings/faq",
-                element: <SettingsFaq />,
+                element: <AdminRoutes><SettingsFaq /></AdminRoutes>,
             },
             {
                 path: "/settings/termsAndCondition",
-                element: <SettingsTermsAndConditions />
+                element: <AdminRoutes><SettingsTermsAndConditions /></AdminRoutes>
             },
             {
                 path: "/settings/termsAndCondition/edittermsAndConditions/:id",
-                element: <EditTermsAndCondition />
+                element: <AdminRoutes><EditTermsAndCondition /></AdminRoutes>
             },
         ]
     },

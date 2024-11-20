@@ -46,7 +46,9 @@ const Seller_Profile = (props: Props) => {
     id: id ? id : null // Only use `id` if it's available
   });
 
-  console.log(userDetails?.data);
+  console.log("49", userDetails?.data?.user);
+
+  const activities =userDetails?.data?.activities
   console.log("43", id);
 
   const [selectedValue, setSelectedValue] = useState();
@@ -194,10 +196,10 @@ const Seller_Profile = (props: Props) => {
       <div className="flex gap-2 h-48 items-center justify-center mt-28">
         <div className="w-1/2 h-[380px] items-center justify-center py-8 bg-white rounded-2xl">
           <div className="mx-auto text-center items-center">
-            <img src={image} className="w-24 h-24 rounded mx-auto" alt="" />
-            <h1 className="text-xl font-bold py-2">Hasan Mahmud</h1>
-            <p className="">Location: Times square, USA</p>
-            <p>hasanmahmud@gmail.com</p>
+            <img src={userDetails?.data?.user?.image} className="w-24 h-24 rounded mx-auto" alt="" />
+            <h1 className="text-xl font-bold py-2">{userDetails?.data?.user?.full_name}</h1>
+            <p className="">Balance: {userDetails?.data?.user?.balance}</p>
+            <p>{userDetails?.data?.user?.email}</p>
           </div>
           <div className="grid grid-cols-5 gap-4 p-4">
             <div className="border border-gray-200 py-6 items-center justify-center text-center 4/12 rounded-xl px-6 ">
@@ -235,7 +237,7 @@ const Seller_Profile = (props: Props) => {
               />
             </div>
           </div>
-          <SellerActivityChart />
+          <SellerActivityChart activities={activities} />
         </div>
       </div>
       <div className="mt-28 bg-white">

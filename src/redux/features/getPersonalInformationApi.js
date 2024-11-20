@@ -4,7 +4,7 @@ const getPersonalInformationApi = baseApi.injectEndpoints({
     endpoints:(builder) => ({
         getPersonalInformation:builder.query({
             query:() => `/getpersonalInformation`,
-            providesTags:["Users"],
+            invalidatesTags:["Users"],
         })
     })
 })

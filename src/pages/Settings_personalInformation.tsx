@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { Upload, Input, Button, Form, message } from 'antd';
 import type { UploadFile, UploadProps, FormProps } from 'antd';
@@ -5,13 +6,14 @@ import ImgCrop from 'antd-img-crop';
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 import { useGetPersonalInformationQuery } from '../redux/features/getPersonalInformationApi';
 import { useUpdatePersonalInformationMutation } from '../redux/features/putUpdatePersonalInfromation';
+import { useUpdateImageMutation } from '../redux/features/putUpdtaeImage';
+import Swal from 'sweetalert2';
 
 type FileType = Exclude<Parameters<UploadProps['beforeUpload']>[0], undefined>;
 
 interface FieldType {
   name?: string;
   email?: string;
-  password?: string;
   oldPassword?: string;
   newPassword?: string;
   confirmPassword?: string;
@@ -24,8 +26,11 @@ const SettingsPersonalInformation: React.FC = () => {
 
   // Fetch personal information data
   const { data, isLoading, isError } = useGetPersonalInformationQuery();
-  const [updatePersonalInformation] = useUpdatePersonalInformationMutation();
-console.log("28", data);
+  const [updateImage] = useUpdateImageMutation();
+  const [updatePersonalInformation, { isSuccess }] = useUpdatePersonalInformationMutation();
+
+  console.log(data);
+
   useEffect(() => {
     if (data && data.data) {
       form.setFieldsValue({
@@ -35,13 +40,12 @@ console.log("28", data);
 
       if (data.data.image) {
         const imageUrl = data.data.image;
-        console.log(imageUrl);
         setFileList([
           {
             uid: '-1',
             name: 'profile.png',
             status: 'done',
-            url: imageUrl,
+            url: imageUrl, // Set the existing image URL
           } as UploadFile,
         ]);
         setPreviewImage(imageUrl);
@@ -50,11 +54,50 @@ console.log("28", data);
       message.error("Failed to load personal information");
     }
   }, [data, isError, form]);
-
-  const onChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
+  const onChange: UploadProps['onChange'] = async ({ fileList: newFileList }) => {
     setFileList(newFileList);
+  
+    if (newFileList.length > 0) {
+      const uploadedFile = newFileList[0].originFileObj; // Get the uploaded file
+  
+      if (uploadedFile) {
+        const formData = new FormData();
+        formData.append('_method', 'PUT');
+        formData.append('image', uploadedFile, uploadedFile.name); // Append the image file to FormData
+  
+        try {
+          const response = await updateImage(formData); // Call the mutation
+          console.log('Image upload response:', response);
+  
+          if (response) {
+            Swal.fire({
+              icon: 'success',
+              title: 'Image Updated',
+              text: 'Your profile image has been successfully updated!',
+              timer: 3000,
+              toast: true,
+              position: 'center',
+              showConfirmButton: false,
+            });
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Failed to update the image.',
+            });
+          }
+        } catch (error) {
+          console.error('Image upload error:', error);
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'An error occurred while updating the image.',
+          });
+        }
+      }
+    }
   };
-
+  
   const onPreview = async (file: UploadFile) => {
     let src = file.url as string;
     if (!src) {
@@ -71,12 +114,6 @@ console.log("28", data);
   };
 
   const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
-    if (!fileList.length || !fileList[0].originFileObj) {
-      message.error("Please upload a profile image");
-      return;
-    }
-
-    // Create a FormData object and append form values
     const formData = new FormData();
     formData.append("_method", "PUT");
     formData.append("full_name", values.name || "");
@@ -84,14 +121,40 @@ console.log("28", data);
     formData.append("new_password", values.newPassword || "");
     formData.append("confirm_password", values.confirmPassword || "");
 
-    // Append the image file as a File object
-    const imageFile = fileList[0].originFileObj as File;
-    formData.append("image", imageFile, imageFile.name);
+    // Check if a new image was uploaded
+    if (fileList.length && fileList[0].originFileObj) {
+      const imageFile = fileList[0].originFileObj as File;
+      formData.append("image", imageFile, imageFile.name);
+    }
 
     try {
-     const response = await updatePersonalInformation(formData);
-      message.success("Profile updated successfully", );
-      console.log("FormData content:",response, Array.from(formData.entries()));
+      const response = await updatePersonalInformation(formData);
+      console.log(response);
+      Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: 'Profile and image updated successfully!',
+        timer: 3000,
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+      });
+
+      // If the personal information update is successful, update the image as well.
+      if (response.status) {
+        // Perform image update only if a new image was selected
+        if (fileList.length && fileList[0].originFileObj) {
+          const imageFile = fileList[0].originFileObj as File;
+          const imageData = new FormData();
+          imageData.append('image', imageFile, imageFile.name);
+
+          // Update the image via the updateImage mutation
+          await updateImage(imageData);
+          message.success("Profile and image updated successfully");
+        }  
+      }
+
+      console.log("FormData content:", Array.from(formData.entries()));
     } catch (error) {
       message.error("Failed to update profile");
     }
@@ -106,6 +169,7 @@ console.log("28", data);
       <div className='flex justify-center mb-6'>
         <ImgCrop rotationSlider>
           <Upload
+
             listType="picture-card"
             fileList={fileList}
             onChange={onChange}
@@ -114,7 +178,6 @@ console.log("28", data);
             {fileList.length < 1 && '+ Upload'}
           </Upload>
         </ImgCrop>
-        
       </div>
       <Form
         name="basic"
@@ -128,7 +191,7 @@ console.log("28", data);
         <Form.Item<FieldType>
           name="name"
           label="Name"
-          rules={[{ required: false, message: 'Please input your name!' }]}
+          rules={[{ required: true, message: 'Please input your name!' }]}
         >
           <Input placeholder="Name" className='h-12' />
         </Form.Item>
@@ -174,7 +237,7 @@ console.log("28", data);
         </Form.Item>
         <Form.Item>
           <Button type="primary" className='w-full h-12 bg-[#4964C6]' htmlType="submit">
-            Edit
+            Save Changes
           </Button>
         </Form.Item>
       </Form>

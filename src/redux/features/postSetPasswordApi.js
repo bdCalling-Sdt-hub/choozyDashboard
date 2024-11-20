@@ -6,7 +6,7 @@ const postSetPasswordApi = baseApi.injectEndpoints({
         query: (data) => {
             // console.log("aimannnnnnnnnnnnnnnnnn",data);
             return {
-              url: `/update-password`,
+              url: `/updatePassword`,
               method: 'POST',
               body: data,
           } 

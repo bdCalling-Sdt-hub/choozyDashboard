@@ -134,14 +134,14 @@ const TransactionTable: React.FC<ProductListingProps> = () => {
           <h1 className="text-xl font-bold text-[#5D5D5D]">Overview</h1>
           <p className="text-[#5D5D5D]">Activities summary at a glance</p>
         </div>
-        <div className="pr-8">
+        {/* <div className="pr-8">
           <SelectBox
             options={selectOptions}
             placeholder="Week"
             onChange={handleSelectChange}
             style={{ width: 100 }}
           />
-        </div>
+        </div> */}
       </div>
       <div className="">
         <Table

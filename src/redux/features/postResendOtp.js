@@ -1,13 +1,13 @@
 import { baseApi } from "../api/baseApi";
 
-const postOtpVerifyApi = baseApi.injectEndpoints({
+const postResendOtpApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
-       postOtp: builder.mutation({
+       resendOtp: builder.mutation({
         query: (data) => {
-            console.log("7, postOtpVerify", data);
+            console.log("7, postResendOtp", data);
             return{
                 // url: '/auth/login',
-                url: '/verifyOtp',
+                url: '/resendOtp',
                 method: 'POST',
                 body: data,
             }
@@ -17,4 +17,4 @@ const postOtpVerifyApi = baseApi.injectEndpoints({
     })
 })
 
-export const {usePostOtpMutation} = postOtpVerifyApi;
+export const {useResendOtpMutation} = postResendOtpApi;

@@ -77,12 +77,12 @@ const Manage_Users = () => {
           >
             <Eye />
           </button>
-          <button
+          {/* <button
             onClick={() => handleDelete(record.action)}
             className="bg-secondary px-3 py-1 rounded hover:bg-primary"
           >
             <Trash />
-          </button>
+          </button> */}
         </div>
       ),
     },

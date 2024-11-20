@@ -38,10 +38,14 @@ const ProductListing: React.FC<ProductListingProps> = () => {
   const [putApproved] = usePutApprovedMutation();
   const [ putCancel] = usePutCancelMutation();
   const [putPending] = usePutPendingMutation()
-    const {data:userLists, isLoading, isError} = useAllProductListQuery();
+  const [searchQuery, setSearchQuery] = useState<string>("");
+
+    const {data:userLists, isLoading, isError} = useAllProductListQuery({
+      search: searchQuery
+    });
   console.log("37",userLists)
 
-  const pageSize = 10;
+  const pageSize = 5;
 
   const data= userLists?.data?.data?.map((item, index) => ({
     sId: item?.id,
@@ -108,12 +112,12 @@ const ProductListing: React.FC<ProductListingProps> = () => {
           >
             <Pencil />
           </button>
-          <button
+          {/* <button
             onClick={() => handleDelete(record.action)}
             className="bg-secondary px-3 py-1 rounded hover:bg-primary"
           >
             <Trash />
-          </button>
+          </button> */}
         </div>
       ),
     },
@@ -164,7 +168,10 @@ const ProductListing: React.FC<ProductListingProps> = () => {
     setOpenDeleteModal(false);
    
   };
-
+const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  setSearchQuery(e.target.value)
+}
+console.log(searchQuery)
   return (
     <div className="py-4">
       <div>
@@ -172,6 +179,7 @@ const ProductListing: React.FC<ProductListingProps> = () => {
           prefix={<Search />}
           className="w-full rounded-2xl h-12 bg-base border-0 text-primary placeholder:text-gray-200"
           placeholder="Search for Listing"
+          onChange={handleSearchChange}
           style={{
             backgroundColor: "#f0f0f0",
             color: "#333333",

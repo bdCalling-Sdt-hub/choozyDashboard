@@ -6,7 +6,7 @@ const postForgetPasswordApi = baseApi.injectEndpoints({
         query: (data) => {
             console.log("aimannnnnnnnnnnnnnnnnn",data);
             return {
-              url: `/forgot-password`,
+              url: `/forgotPassword`,
               method: 'POST',
               body: data,
           } 
