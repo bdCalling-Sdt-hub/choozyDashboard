@@ -25,6 +25,7 @@ const RevenueChart: React.FC = () => {
   // Map the API data into the format Recharts expects
   const data =
     isSuccess && RevenueData?.data?.activities?.monthlyRevenue
+    
       ? RevenueData.data.activities.monthlyRevenue.map((item: { month: string; revenue: string }) => ({
           name: item.month,
           amt: parseFloat(item.revenue), // Ensure revenue is converted to a number
