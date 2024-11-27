@@ -8,7 +8,7 @@ export default defineConfig({
     svgr(),
   ],
   server: {
-    host: '192.168.12.157',
+    host: '137.184.184.228',
     port: 4000,
     open: true,
   }
