@@ -1,10 +1,10 @@
 import { baseApi } from "../api/baseApi";
 
-const postTermsAndConditionApi = baseApi.injectEndpoints({
+const postAboutusApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
-      postTermsAndCondition: builder.mutation({
+      postAboutus: builder.mutation({
         query: (data) => ({
-          url: `/terms-and-conditions`,
+          url: `/about`,
           method: 'POST',
           body: data,
          
@@ -14,5 +14,5 @@ const postTermsAndConditionApi = baseApi.injectEndpoints({
     }),
   });
   
-  export const { usePostTermsAndConditionMutation} = postTermsAndConditionApi;
+  export const {usePostAboutusMutation} = postAboutusApi;
   

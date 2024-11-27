@@ -102,7 +102,7 @@ console.log("data", data?.data?.users)
         {cardData.map((card, index) => (
           <div
             key={card.id}
-            className={`2xl:w-[350px] xl:w-[320px] lg:w-[190px] w-[450px] h-[210px] px-[20px] py-[32px] flex justify-center items-center rounded-2xl cursor-pointer ${
+            className={`2xl:w-[350px] xl:w-[320px] lg:w-[190px] w-[450px] h-[170px] px-[20px] py-[32px] flex justify-center items-center rounded-2xl cursor-pointer ${
               selectedCard === index ? 'bg-[#02B5AA] text-[#E8EBF0]' : 'border border-[#E7E7E7]'
             }`}
             onClick={() => setSelectedCard(index)}

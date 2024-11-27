@@ -14,6 +14,7 @@ type FileType = Exclude<Parameters<UploadProps['beforeUpload']>[0], undefined>;
 interface FieldType {
   name?: string;
   email?: string;
+  contact: string;
   oldPassword?: string;
   newPassword?: string;
   confirmPassword?: string;
@@ -36,6 +37,7 @@ const SettingsPersonalInformation: React.FC = () => {
       form.setFieldsValue({
         name: data.data.full_name,
         email: data.data.email,
+        contact: data?.data?.contact
       });
 
       if (data.data.image) {
@@ -117,6 +119,7 @@ const SettingsPersonalInformation: React.FC = () => {
     const formData = new FormData();
     formData.append("_method", "PUT");
     formData.append("full_name", values.name || "");
+    formData.append("contact", values.contact || "");
     formData.append("old_password", values.oldPassword || "");
     formData.append("new_password", values.newPassword || "");
     formData.append("confirm_password", values.confirmPassword || "");
@@ -129,7 +132,7 @@ const SettingsPersonalInformation: React.FC = () => {
 
     try {
       const response = await updatePersonalInformation(formData);
-      console.log(response);
+      console.log("formdata", response);
       Swal.fire({
         icon: 'success',
         title: 'Success',
@@ -191,17 +194,18 @@ const SettingsPersonalInformation: React.FC = () => {
         <Form.Item<FieldType>
           name="name"
           label="Name"
-          rules={[{ required: true, message: 'Please input your name!' }]}
+          rules={[{ required: false, message: 'Please input your name!' }]}
         >
           <Input placeholder="Name" className='h-12' />
         </Form.Item>
         <Form.Item<FieldType>
-          name="email"
-          label="Email"
-          rules={[{ required: true, message: 'Please input your email!' }]}
+          name="contact"
+          label="contact"
+          rules={[{ required: false, message: 'Please input your name!' }]}
         >
-          <Input placeholder="Email" className='h-12' />
+          <Input placeholder="Contact no" className='h-12' />
         </Form.Item>
+        
         <Form.Item<FieldType>
           name="oldPassword"
           label="Old Password"

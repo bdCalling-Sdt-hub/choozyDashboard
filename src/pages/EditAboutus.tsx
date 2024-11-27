@@ -5,32 +5,33 @@ import JoditEditor from "jodit-react";
 import { useEffect, useRef, useState } from "react";
 import Swal from "sweetalert2";
 import React from "react";
-import { usePostTermsAndConditionMutation } from "../redux/features/postTermsAndCondition";
-import { useGetTermsAndConditionQuery } from "../redux/features/getTermsAndConditionApi";
+import { usePostAboutusMutation } from "../redux/features/postAboutus";
+import { useGetAboutusQuery } from "../redux/features/getAboutusApi";
 
-const EditTermsAndCondition: React.FC = () => {
+
+
+const EditAboutus: React.FC = () => {
   const navigate = useNavigate();
   const editor = useRef(null);
   const [content, setContent] = useState<string>("");
   
   // Initialize the mutation
-  const [postTermsAndCondition, { isLoading }] = usePostTermsAndConditionMutation();
-  const {data} = useGetTermsAndConditionQuery();
+  const [postAboutus, { isLoading }] = usePostAboutusMutation();
+  const {data} = useGetAboutusQuery();
 
   useEffect(() => {
-    const existingData = data?.data?.content
+    const existingData = data?.data?.about
     // Load initial data (replace with actual data fetching)
     setContent(existingData); // Use the mock data content
   }, []);
 
   const handleUpdate = async () => {
-    console.log("click")
     try {
       const div = document.createElement("div");
       div.innerHTML = content;
       const cleanedContent = div.textContent || div.innerHTML || "";
       // Make the API call
-      const response = await postTermsAndCondition({ content: cleanedContent, status: "1",}).unwrap();
+      const response = await postAboutus({ about: cleanedContent }).unwrap();
 
       if (response) {
         Swal.fire({
@@ -41,7 +42,7 @@ const EditTermsAndCondition: React.FC = () => {
           timer: 1500,
         });
        
-        navigate("/settings/termsAndCondition");
+        navigate("/settings/aboutus");
       }
     } catch (error) {
       Swal.fire({
@@ -54,7 +55,7 @@ const EditTermsAndCondition: React.FC = () => {
   };
 
   const handleBackTermsAndCondition = () => {
-    navigate("/settings/termsAndCondition");
+    navigate("/settings/aboutus");
   };
 
   return (
@@ -64,7 +65,7 @@ const EditTermsAndCondition: React.FC = () => {
         className="mt-[44px] cursor-pointer flex items-center pb-3 gap-2"
       >
         <MdOutlineKeyboardArrowLeft size={34} />
-        <h1 className="text-[24px] font-semibold">Edit Terms & Condition</h1>
+        <h1 className="text-[24px] font-semibold">Edit About Us</h1>
       </div>
       <div className="text-justify mt-[24px] relative">
         <JoditEditor
@@ -91,4 +92,4 @@ const EditTermsAndCondition: React.FC = () => {
   );
 };
 
-export default EditTermsAndCondition;
+export default EditAboutus;

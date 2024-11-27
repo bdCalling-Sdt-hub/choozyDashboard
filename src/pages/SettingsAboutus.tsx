@@ -2,20 +2,23 @@ import { Button, Spin, Alert } from "antd";
 import React from "react";
 import { IoIosArrowBack } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
-import { useGetTermsAndConditionQuery } from "../redux/features/getTermsAndConditionApi";
+import { useGetAboutusQuery } from "../redux/features/getAboutusApi";
 
-const SettingsTermsAndConditions = () => {
-  const { data, isLoading, isError } = useGetTermsAndConditionQuery();
-  console.log("9", data?.data?.id);
+
+
+const Settings_AboutUs = () => {
+  const { data, isLoading, isError } = useGetAboutusQuery()
+  console.log("about", data)
   const navigate = useNavigate();
 
   const handleBackSettings = () => {
-    navigate("/settings/personalInformation");
+    navigate("/settings/aboutus");
   };
 
-  const handleEdit = (id) => {
+  const handleEdit = () => {
+    console.log("Edit not works")
     // if (id) {
-      navigate(`/settings/termsAndCondition/edittermsAndConditions`);
+      navigate(`/settings/aboutus/editAboutus`);
     // }
   };
 
@@ -24,8 +27,19 @@ const SettingsTermsAndConditions = () => {
   }
 
   if (isError) {
-    return <Alert message="Error" description="Failed to load content." type="error" showIcon />;
+    return (
+      <Alert
+        message="Error"
+        description="Failed to load content."
+        type="error"
+        showIcon
+      />
+    );
   }
+
+ 
+  const content = data?.data?.about;
+  const noData = !content || content.trim() === "";
 
   return (
     <div className="w-[79vw]">
@@ -35,11 +49,15 @@ const SettingsTermsAndConditions = () => {
           className="border-none text-[#193664] flex items-center gap-2 cursor-pointer"
         >
           <IoIosArrowBack />
-          Terms & Conditions
+          About us
         </div>
       </div>
       <div className="pl-10 text-justify py-12">
-        <p>{data?.data?.content}</p>
+        {noData ? (
+          <p>No data found</p>
+        ) : (
+          <p>{content}</p>
+        )}
       </div>
       <div className="flex justify-end">
         <Button
@@ -59,4 +77,6 @@ const SettingsTermsAndConditions = () => {
   );
 };
 
-export default SettingsTermsAndConditions;
+
+
+export default Settings_AboutUs

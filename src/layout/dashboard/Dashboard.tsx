@@ -23,6 +23,7 @@ import { useGetProfileQuery } from "../../redux/features/getProfleApi";
 import { useGetNotificationsQuery } from "../../redux/features/getNotificationApi";
 import { usePostLogoutMutation } from "../../redux/features/postLoguout";
 import Swal from "sweetalert2";
+import { HiOutlineUserGroup, HiUserGroup } from "react-icons/hi2";
 
 const { Header, Sider, Content } = Layout;
 
@@ -84,6 +85,12 @@ const menuItems: MenuItem[] = [
     icon: <img src={settings} alt="Logo" width={18} height={18} />,
     activeIcon: <img src={settings} alt="Logo" width={18} height={18} style={{ filter: "invert(1)" }} />,
     children: [
+      {
+        path: "/settings/aboutus",
+        title: "About us",
+        icon: <HiOutlineUserGroup size={18} color="#4964C6" />,
+        activeIcon: <HiUserGroup size={18} color="#4964C6" />,
+      },
       {
         path: "/settings/personalInformation",
         title: "Personal information",

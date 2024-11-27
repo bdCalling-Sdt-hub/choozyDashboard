@@ -22,6 +22,8 @@ import EditTermsAndCondition from "../pages/EditTermsAndConditions";
 import RejectionOrder from "../pages/RejectionOrder";
 import AdminRoutes from "./AdminRoutes";
 import ErrorPage from "../pages/ErrorPage";
+import Settings_AboutUs from "../pages/SettingsAboutus";
+import EditAboutus from "../pages/EditAboutus";
 
 
 
@@ -77,6 +79,14 @@ const router = createBrowserRouter([
                 element: <AdminRoutes><SettingsPage /></AdminRoutes>,
             },
             {
+                path: "/settings/aboutus",
+                element: <AdminRoutes><Settings_AboutUs/></AdminRoutes>,
+            },
+            {
+                path: "/settings/aboutus/editAboutus",
+                element: <AdminRoutes><EditAboutus/></AdminRoutes>,
+            },
+            {
                 path: "/settings/personalInformation",
                 element: <AdminRoutes><Settings_personalInformation /></AdminRoutes>,
             },
@@ -89,7 +99,7 @@ const router = createBrowserRouter([
                 element: <AdminRoutes><SettingsTermsAndConditions /></AdminRoutes>
             },
             {
-                path: "/settings/termsAndCondition/edittermsAndConditions/:id",
+                path: "/settings/termsAndCondition/edittermsAndConditions",
                 element: <AdminRoutes><EditTermsAndCondition /></AdminRoutes>
             },
         ]

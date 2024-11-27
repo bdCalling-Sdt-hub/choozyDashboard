@@ -46,7 +46,7 @@ const Seller_Profile = (props: Props) => {
     id: id ? id : null // Only use `id` if it's available
   });
 
-  console.log("49", userDetails?.data?.user);
+  console.log("49", userDetails?.data?.products);
 
   const activities =userDetails?.data?.activities
   console.log("43", id);
@@ -65,20 +65,14 @@ const Seller_Profile = (props: Props) => {
 
   const data = userDetails?.data?.products.map((item, index) => ({
     sId: item?.id,
-    image: Array.isArray(item?.product_image) ? (
-      item?.product_image.map((img, idx) => (
-        <div key={idx}>
-          <img src={img} className="w-9 h-9 rounded" alt={`product-image-${idx}`} />
-        </div>
-      ))
-    ) : [],
+    image: item?.product_images,
     productName: item?.product_name || "KTM 390Duke",  // Adjust with actual field name
     productCategory: item?.product_category || "Vehicle",  // Adjust with actual field name
     price: item?.price || "$6729.00",  // Adjust with actual field name
     quantity: item?.quantity || "Quantity",  // Adjust with actual field name
     action: {
       sId: index + 1,
-      image: <img src={item?.product_image?.[0]} className="w-9 h-9 rounded" alt="product-image" />, // Display first image in the action section
+      image: item?.product_images,
       productName: item?.product_name || "KTM 390Duke",  // Adjust with actual field name
       productCategory: item?.product_category || "Vehicle",  // Adjust with actual field name
       price: item?.price || "$6729.00",  // Adjust with actual field name
@@ -94,20 +88,24 @@ const Seller_Profile = (props: Props) => {
       title: "Listing",
       dataIndex: "image",
       key: "image",
-      render: (_: any, record: UserData) => (
-        <div className="flex items-center">
-          {Array.isArray(record.image) && record.image.length > 0 ? (
-            record.image.map((img, idx) => (
-              <div key={idx} className="mr-2">
-                <img src={img} className="w-9 h-9 rounded" alt={`product-image-${idx}`} />
-              </div>
-            ))
-          ) : (
-            <span>No images available</span>
-          )}
-          <span className="ml-3">{record.productName}</span>
-        </div>
-      ),
+      render: (_: any, record: UserData) => {
+        console.log("Record:", record); // Log the record here
+  
+        return (
+          <div className="flex items-center">
+            {Array.isArray(record.image) && record.image.length > 0 ? (
+              record.image.map((img, idx) => (
+                <div key={idx} className="mr-2">
+                  <img src={img} className="w-9 h-9 rounded" alt={`product-image-${idx}`} />
+                </div>
+              ))
+            ) : (
+              <span>No images available</span>
+            )}
+            <span className="ml-3">{record.productName}</span>
+          </div>
+        );
+      },
     },
     {
       title: "Category",
